@@ -1,0 +1,186 @@
+﻿@inject Microsoft.ApplicationInsights.AspNetCore.JavaScriptSnippet JavaScriptSnippet
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - LMTracking</title>
+
+    <environment names="Development">
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+
+        <link href="~/lib/bootstrap-extension/css/bootstrap-extension.css" rel="stylesheet">
+        <!-- Menu CSS -->
+        @*<link href="~/lib/sidebar-nav/dist/sidebar-nav.min.css" rel="stylesheet">*@
+        <link href="~/lib/metisMenu/dist/metisMenu.css" rel="stylesheet" />
+
+        <!-- toast CSS -->
+        <link href="~/lib/toast-master/css/jquery.toast.css" rel="stylesheet">
+        <!-- morris CSS -->
+        <link href="~/lib/morris.js/morris.css" rel="stylesheet">
+
+        <!-- animation CSS -->
+        <link href="~/lib/template/css/animate.css" rel="stylesheet">
+        <!-- Custom CSS -->
+        <link href="~/lib/template/css/style.css" rel="stylesheet">
+        <!-- color CSS -->
+        <link href="~/lib/template/css/colors/default.css" id="theme" rel="stylesheet">
+
+        <link rel="stylesheet" href="~/css/site.css" />
+
+
+
+    </environment>
+    <environment names="Staging,Production">
+        <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
+              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
+              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
+        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+    </environment>
+
+    @Html.Raw(JavaScriptSnippet.FullScript)
+
+</head>
+<body>
+
+    <!-- Preloader -->
+    <div class="preloader">
+        <div class="cssload-speeding-wheel"></div>
+    </div>
+    <div id="wrapper">
+        <!-- Top Navigation -->
+        @Html.Partial("_TopNavbar")
+
+        <!-- Left navbar-header -->
+        @Html.Partial("_Navigation")
+        <!-- Left navbar-header end -->
+        <!-- Page Content -->
+        <div id="page-wrapper">
+            <div class="container-fluid">
+
+                @RenderBody()
+
+            </div>
+            <!-- /.container-fluid -->
+            <footer class="footer text-center"> 2017 &copy; Elite Admin brought to you by themedesigner.in </footer>
+        </div>
+        <!-- /#page-wrapper -->
+    </div>
+
+
+
+    @*<!-- Bootstrap Core JavaScript -->
+        <script src="bootstrap/dist/js/tether.min.js"></script>
+        <script src="bootstrap/dist/js/bootstrap.min.js"></script>
+
+
+        <!--Counter js -->
+        <script src="../plugins/bower_components/waypoints/lib/jquery.waypoints.js"></script>
+        <script src="../plugins/bower_components/counterup/jquery.waypoints.min.js"></script>
+
+        <!-- Sparkline chart JavaScript -->
+        <script src="../plugins/bower_components/jquery-sparkline/jquery.sparkline.min.js"></script>
+        <script src="../plugins/bower_components/jquery-sparkline/jquery.charts-sparkline.js"></script>
+        <!--Style Switcher -->
+        <script src="../plugins/bower_components/styleswitcher/jQuery.style.switcher.js"></script>*@
+
+
+
+
+
+
+
+
+
+    <environment names="Development">
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="~/lib/bootstrap-extension/js/bootstrap-extension.min.js"></script>
+
+        <!-- Menu Plugin JavaScript -->
+        @*<script src="~/lib/sidebar-nav/dist/sidebar-nav.min.js"></script>*@
+        <script src="~/lib/metisMenu/dist/metisMenu.js"></script>
+
+        <!--slimscroll JavaScript -->
+        <script src="~/lib/template/js/jquery.slimscroll.js"></script>
+
+        <!--Wave Effects -->
+        <script src="~/lib/template/js/waves.js"></script>
+
+        <!--Morris JavaScript -->
+        <script src="~/lib/raphael/raphael.js"></script>
+        <script src="~/lib/eve-raphael/eve.js"></script>
+        <script src="~/lib/morris.js/morris.js"></script>
+
+        <!-- Custom Theme JavaScript -->
+        <script src="~/lib/template/js/custom.min.js"></script>
+        @*<script src="~/lib/template/js/dashboard1.js"></script>*@
+
+        <!-- Sparkline chart JavaScript -->
+        <script src="~/lib/toast-master/js/jquery.toast.js"></script>
+
+        <script src="~/js/site.js" asp-append-version="true"></script>
+    </environment>
+    <environment names="Staging,Production">
+        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
+                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+                asp-fallback-test="window.jQuery"
+                crossorigin="anonymous"
+                integrity="sha384-K+ctZQ+LL8q6tP7I94W+qzQsfRV2a+AfHIi9k8z8l9ggpc8X+Ytst4yBo/hH+8Fk">
+        </script>
+        <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"
+                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
+                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
+                crossorigin="anonymous"
+                integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">
+        </script>
+        <script src="~/js/site.min.js" asp-append-version="true"></script>
+    </environment>
+
+
+    <script type="text/javascript">
+
+
+        // Variável contendo a raiz(root) da url. Para ser usada nas chamadas Jquery.Ajax
+        var rootUrl = '@Url.Content("~/")';
+
+
+        $(document).ready(function () {
+            $.toast({
+                heading: 'Welcome to Elite admin',
+                text: 'Use the predefined ones, or specify a custom position object.',
+                position: 'top-right',
+                loaderBg: '#ff6849',
+                icon: 'info',
+                hideAfter: 3500,
+
+                stack: 6
+            });
+
+            $('.dropdown-toggle').dropdown();
+        });
+
+        $(window).resize(function () {
+            console.log(findBootstrapEnvironment());
+        });
+
+        function findBootstrapEnvironment() {
+            var environments = ['xs', 'sm', 'md', 'lg', 'xl'];
+            var $el = $('<span />');
+            $el.appendTo($('body'));
+            for (var i = environments.length - 1; i >= 0; i--) {
+                var env = environments[i];
+                $el.addClass('hidden-' + env);
+                if ($el.is(':hidden')) {
+                    $el.remove();
+                    return env;
+                }
+            }
+            $el.remove();
+            return false;
+        }
+    </script>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,267 @@
+<style>
+    .gmaps-overlay_arrow.above {
+        bottom: -15px;
+        border-left: 16px solid transparent;
+        border-right: 16px solid transparent;
+    }
+
+    .gmaps-overlay {
+        display: block;
+        text-align: center;
+        color: #fff;
+        font-size: 12px;
+        line-height: 15px;
+        border-radius: 4px;
+        padding: 10px 10px;
+    }
+
+    .motoristas.gmaps-overlay {
+        background: #ab8ce4;
+    }
+
+    .motoristas.gmaps-overlay_arrow.above {
+        border-top: 16px solid #ab8ce4;
+    }
+
+    .veiculos.gmaps-overlay {
+        background: #03a9f3;
+    }
+
+    .veiculos.gmaps-overlay_arrow.above {
+        border-top: 16px solid #03a9f3;
+    }
+
+    .motoristas.active.action-maps {
+        background: #ab8ce4;
+        border-color: #ab8ce4;
+    }
+
+        .motoristas.active.action-maps:hover {
+            background: #8870b6;
+            border-color: #8870b6;
+        }
+
+    .veiculos.active.action-maps {
+        background: #03a9f3;
+        border-color: #03a9f3;
+    }
+
+        .veiculos.active.action-maps:hover {
+            background: #0298da;
+            border-color: #0298da;
+        }
+</style>
+
+<div class="row bg-title">
+    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+        <h4 class="page-title">Dashboard 1</h4>
+    </div>
+    <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+        <ol class="breadcrumb">
+            <li><a href="#">Tracking</a></li>
+            <li class="active">Dashboard 1</li>
+        </ol>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+<div class="row">
+    <div class="col-md-8 col-lg-9 col-sm-12">
+        <div class="white-box">
+            <div id="overlayermap" class="gmaps divmapa"></div>
+        </div>
+    </div>
+
+    <div class="col-md-4 col-lg-3 col-sm-12" id="PontosMapa">
+
+        <div class="white-box">
+            <div class="row" id="Motoristas">
+                <h3 class="box-title">Motoristas</h3>
+                <div class="list-group">
+                    <a href="#" class="list-group-item action-maps active" data-id="1">Cras justo odio</a>
+                    <a href="#" class="list-group-item action-maps active" data-id="2">Dapibus ac facilisis in</a>
+                    <a href="#" class="list-group-item action-maps active" data-id="3">Morbi leo risus</a>
+                    <a href="#" class="list-group-item action-maps active" data-id="4">Porta ac consectetur ac</a>
+                    <a href="#" class="list-group-item action-maps active" data-id="5">Vestibulum at eros</a>
+                </div>
+            </div>
+            <div class="row" id="Veiculos">
+                <h3 class="box-title">Veiculos</h3>
+                <div class="list-group">
+                    <a href="#" class="list-group-item action-maps active" data-id="1">Cras justo odio</a>
+                    <a href="#" class="list-group-item action-maps active" data-id="2">Dapibus ac facilisis in</a>
+                    <a href="#" class="list-group-item action-maps active" data-id="3">Morbi leo risus</a>
+                    <a href="#" class="list-group-item action-maps active" data-id="4">Porta ac consectetur ac</a>
+                    <a href="#" class="list-group-item action-maps active" data-id="5">Vestibulum at eros</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+
+@section scripts {
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBmT5XSyVzsfnSFhxLwzup_-zgW3xa0lhI&callback=initMap"></script>
+    <script src="~/lib/gmaps/gmaps.js"></script>
+    <script src="~/lib/gmaps/lib/jquery.gmaps.js"></script>
+
+    <script>
+
+
+
+        $(document).ready(function () {
+            CalcularHeightMapa();
+
+            InicializarConfiguracoesMapa();
+        });
+
+        $(window).resize(function () {
+            CalcularHeightMapa();
+        });
+
+        function CalcularHeightMapa() {
+
+            if ($('#PontosMapa').height() > $(window).height() - 280) {
+                $('.divmapa').height($('#PontosMapa').height());
+            }
+            else {
+                $('.divmapa').height($(window).height() - 280);
+            }
+
+            if (mapaConfig != undefined) {
+            // (the 'map' here is the result of the created 'var map = ...' above)
+                google.maps.event.trigger(mapaConfig, "resize");
+            }
+
+        }
+
+        var mapaConfig;
+        var PontosMapas = {};
+
+
+        function InicializarConfiguracoesMapa() {
+
+            var latitude = -23.5291447;
+            var longitude = -46.7388459;
+
+            mapaConfig = new GMaps({
+                el: '#overlayermap',
+                lat: latitude,
+                lng: longitude,
+                zoom: 13,
+                panControl: false,
+                scrollwheel: true,
+                streetViewControl: false,
+                mapTypeControl: false,
+                overviewMapControl: false
+            });
+
+            CarregarPontosMapas();
+        }
+
+        function AdicionarLocal(local) {
+            if (mapaConfig == undefined) {
+                InicializarConfiguracoesMapa();
+            }
+
+            var cssClass = 'motoristas';
+            var icone = '<i class="fa fa-user"></i>'; // Motoristas
+            if (local.TipoPonto == 2) {
+                cssClass = 'veiculos';
+                icone = '<i class="fa fa-truck"></i>';  // Veiculos
+            }
+
+            return mapaConfig.drawOverlay({
+                lat: local.latitude,
+                lng: local.longitude,
+                layer: 'overlayLayer',
+                content: '<div class="gmaps-overlay ' + cssClass + '" data-id="' + local.id+'">' + icone + ' ' + local.Descricao + '<div class="gmaps-overlay_arrow above ' + cssClass + '"></div></div>',
+            });
+        }
+
+        function CarregarPontosMapas() {
+            PontosMapas =
+                [
+                    { id: 1, latitude: -23.528743, longitude: -46.739711, layer: undefined, TipoPonto: 1, Descricao: 'Roberto Carlos' },
+                    { id: 2, latitude: -23.526452, longitude: -46.735209, layer: undefined, TipoPonto: 1, Descricao: 'Julio Pereira' },
+                    { id: 3, latitude: -23.537384, longitude: -46.720805, layer: undefined, TipoPonto: 1, Descricao: 'Fernando Coutinho' },
+                    { id: 4, latitude: -23.526327, longitude: -46.713252, layer: undefined, TipoPonto: 1, Descricao: 'Juliana Couto' },
+                    { id: 5, latitude: -23.548065, longitude: -46.748652, layer: undefined, TipoPonto: 1, Descricao: 'Fatima Bernardes' },
+
+                    { id: 6, latitude: -23.525142, longitude: -46.765459, layer: undefined, TipoPonto: 2, Descricao: 'CVT - 4494' },
+                    { id: 7, latitude: -23.528604, longitude: -46.773870, layer: undefined, TipoPonto: 2, Descricao: 'DUS - 4668' },
+                    { id: 8, latitude: -23.532736, longitude: -46.763956, layer: undefined, TipoPonto: 2, Descricao: 'AAI - 7984' },
+                    { id: 9, latitude: -23.514832, longitude: -46.753356, layer: undefined, TipoPonto: 2, Descricao: 'PPA - 1150' },
+                    { id: 10, latitude: -23.540260, longitude: -46.719487, layer: undefined, TipoPonto: 2, Descricao: 'FUJ - 6657' }
+                ];
+
+
+            $('#Motoristas').find('.list-group').empty();
+            $('#Veiculos').find('.list-group').empty();
+
+            for (var i = 0; i < PontosMapas.length; i++) {
+                PontosMapas[i].layer = AdicionarLocal(PontosMapas[i]);
+
+                if (PontosMapas[i].TipoPonto == 1) {
+                    $('#Motoristas').find('.list-group').append('<a href="#" class="list-group-item action-maps active motoristas" data-id="' + PontosMapas[i].id + '"><i class="fa fa-user fa-fw" aria-hidden="true"></i>&nbsp; ' + PontosMapas[i].Descricao + '</a>');
+                } else {
+                    $('#Veiculos').find('.list-group').append('<a href="#" class="list-group-item action-maps active veiculos" data-id="' + PontosMapas[i].id + '"><i class="fa fa-truck fa-fw" aria-hidden="true"></i>&nbsp; ' + PontosMapas[i].Descricao + '</a>');
+                }
+            }
+        }
+
+
+        $(document).on('click', '.action-maps', function () {
+
+            var id = parseInt($(this).attr('data-id'));
+
+            for (var i = 0; i < PontosMapas.length; i++) {
+                if (PontosMapas[i].id == id) {
+
+                    if ($(this).hasClass('active')) {
+                        $(this).removeClass('active');
+
+                        PontosMapas[i].layer.setMap(undefined);
+                        mapaConfig.setZoom(13);
+
+                    } else {
+                        $(this).addClass('active');
+
+                        PontosMapas[i].layer = AdicionarLocal(PontosMapas[i]);
+                    }
+                }
+            }
+        });
+
+        $(document).on('mouseover', '.action-maps', function () {
+
+            var id = parseInt($(this).attr('data-id'));
+
+            for (var i = 0; i < PontosMapas.length; i++) {
+                if (PontosMapas[i].id == id) {
+
+                    if ($(this).hasClass('active')) {
+                        mapaConfig.setCenter(PontosMapas[i].latitude, PontosMapas[i].longitude);
+                        mapaConfig.setZoom(15)
+                    }
+                }
+            }
+        });
+
+        $(document).on('mouseover', '.gmaps-overlay', function () {
+            alert('teste');
+            var id = parseInt($(this).attr('data-id'));
+            $('.action-maps[data-id=' + id + ']').css("color", "red");
+        });
+        $(document).on('mouseout', '.gmaps-overlay', function () {
+
+            var id = parseInt($(this).attr('data-id'));
+            $('.action-maps[data-id=' + id + ']').css("color", "");
+        });
+
+        
+
+
+    </script>
+}

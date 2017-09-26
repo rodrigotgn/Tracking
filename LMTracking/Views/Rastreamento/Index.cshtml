@@ -1,0 +1,325 @@
+@{
+    ViewBag.Title = "Rastreamento";
+}
+<style>
+    .gmaps-overlay_arrow.above {
+        bottom: -15px;
+        border-left: 16px solid transparent;
+        border-right: 16px solid transparent;
+    }
+
+    .gmaps-overlay {
+        display: block;
+        text-align: center;
+        color: #fff;
+        font-size: 12px;
+        line-height: 15px;
+        border-radius: 4px;
+        padding: 10px 10px;
+    }
+
+    .motoristas.gmaps-overlay {
+        background: #ab8ce4;
+    }
+
+    .motoristas.gmaps-overlay_arrow.above {
+        border-top: 16px solid #ab8ce4;
+    }
+
+    .veiculos.gmaps-overlay {
+        background: #03a9f3;
+    }
+
+    .veiculos.gmaps-overlay_arrow.above {
+        border-top: 16px solid #03a9f3;
+    }
+
+    .motoristas.ativo.action-maps {
+        background: #ab8ce4;
+        border-color: #ab8ce4;
+        color: #fff;
+        font-weight:300;
+    }
+
+        .motoristas.ativo.action-maps:hover {
+            background: #8870b6;
+            border-color: #8870b6;
+        }
+
+    .veiculos.ativo.action-maps {
+        background: #03a9f3;
+        border-color: #03a9f3;
+    }
+
+        .veiculos.ativo.action-maps:hover {
+            background: #0298da;
+            border-color: #0298da;
+        }
+
+    #Motoristas {
+        max-height: 200px;
+        transition: max-height 0.15s ease-out;
+        overflow: hidden;
+    }
+
+        #Motoristas:hover {
+            max-height: 500px;
+            transition: max-height 0.25s ease-in;
+        }
+
+    #Veiculos {
+        max-height: 200px;
+        transition: max-height 0.15s ease-out;
+        overflow: hidden;
+    }
+
+        #Veiculos:hover {
+            max-height: 500px;
+            transition: max-height 0.25s ease-in;
+        }
+
+    .text-left {
+        text-align: left;
+    }
+</style>
+
+<div class="row bg-title">
+    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+        <h4 class="page-title">Rastreamento</h4>
+    </div>
+    <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+        <ol class="breadcrumb">
+            <li><a href="#">LM Tracking</a></li>
+            <li class="active">Rastreamento</li>
+        </ol>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+<div class="row">
+    <div class="col-md-8 col-lg-9 col-sm-12">
+        <div class="white-box">
+            <div id="overlayermap" class="gmaps divmapa"></div>
+        </div>
+    </div>
+
+    <div class="col-md-4 col-lg-3 col-sm-12" id="PontosMapa">
+
+        <div class="white-box">
+            <div class="row" id="Motoristas">
+                <h3 class="box-title">Motoristas</h3>
+                @*<div class="list-group">
+                    <a href="#" class="list-group-item action-maps active" data-id="1">Cras justo odio</a>
+                </div>*@
+            </div>
+            <div class="row" id="Veiculos">
+                <h3 class="box-title">Veiculos</h3>
+                <div class="list-group">
+                    <a href="#" class="list-group-item action-maps active" data-id="1">Cras justo odio</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts {
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBmT5XSyVzsfnSFhxLwzup_-zgW3xa0lhI&callback=initMap"></script>
+    <script src="~/lib/gmaps/gmaps.js"></script>
+    <script>
+
+        $(document).ready(function () {
+            CalcularHeightMapa();
+
+            InicializarConfiguracoesMapa();
+
+            CarregarPontosMapas();
+        });
+
+        $(window).resize(function () {
+            CalcularHeightMapa();
+        });
+
+        function CalcularHeightMapa() {
+
+            if ($('#PontosMapa').height() > $(window).height() - 280) {
+                $('.divmapa').height($('#PontosMapa').height());
+            }
+            else {
+                $('.divmapa').height($(window).height() - 280);
+            }
+
+            if (mapaConfig != undefined) {
+                // (the 'map' here is the result of the created 'var map = ...' above)
+                google.maps.event.trigger(mapaConfig, "resize");
+            }
+
+        }
+
+        var mapaConfig;
+        var PontosMapas = {};
+
+
+        function InicializarConfiguracoesMapa() {
+
+            var latitude = -23.5291447;
+            var longitude = -46.7388459;
+
+            mapaConfig = new GMaps({
+                el: '#overlayermap',
+                lat: latitude,
+                lng: longitude,
+                zoom: 13,
+                panControl: false,
+                scrollwheel: true,
+                streetViewControl: false,
+                mapTypeControl: false,
+                overviewMapControl: false
+            });
+        }
+
+        function AdicionarLocal(local) {
+            if (mapaConfig == undefined) {
+                InicializarConfiguracoesMapa();
+            }
+
+            var cssClass = 'motoristas';
+            var icone = '<i class="fa fa-user"></i>'; // Motoristas
+            if (local.tipoPonto == 2) {
+                cssClass = 'veiculos';
+                icone = '<i class="fa fa-truck"></i>';  // Veiculos
+            }
+
+            return mapaConfig.drawOverlay({
+                lat: local.latitude,
+                lng: local.longitude,
+                layer: 'overlayLayer',
+                content: '<div class="gmaps-overlay ' + cssClass + '" data-id="' + local.id + '">' + icone + ' ' + local.descricao + '<div class="gmaps-overlay_arrow above ' + cssClass + '"></div></div>',
+            });
+        }
+
+        function ExibirPontosMapas() {
+
+            $('#Motoristas').find('.list-group').empty();
+            $('#Veiculos').find('.list-group').empty();
+
+            for (var i = 0; i < PontosMapas.length; i++) {
+                PontosMapas[i].layer = AdicionarLocal(PontosMapas[i]);
+
+                if (PontosMapas[i].tipoPonto == 1) {
+                    // $('#Motoristas').find('.list-group').append('<a href="#" class="list-group-item action-maps active motoristas" data-id="' + PontosMapas[i].id + '"><i class="fa fa-user fa-fw" aria-hidden="true"></i>&nbsp; ' + PontosMapas[i].descricao + '</a>');
+
+                    var htmlButton = '\
+                        <div class="btn-group col-sm-12">\
+                            <button type="button" class="btn btn-default col-sm-10 text-left action-maps ativo motoristas" data-id="' + PontosMapas[i].id + '">\
+                                <i class="fa fa-user fa-fw" aria-hidden="true"></i>&nbsp; \
+                                ' + PontosMapas[i].descricao + '</button >\
+                                <button type="button" class="btn btn-default col-sm-2 action-maps ativo motoristas dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">\
+                                <span class="caret"></span>\
+                                <span class="sr-only">Toggle Dropdown</span>\
+                            </button>\
+                            <ul class="dropdown-menu">\
+                                <li><a href="#">Detalhe</a></li>\
+                            </ul>\
+                        </div>';
+
+                    $('#Motoristas').append(htmlButton);
+                } else {
+                    $('#Veiculos').find('.list-group').append('<a href="#" class="list-group-item action-maps ativo active veiculos" data-id="' + PontosMapas[i].id + '"><i class="fa fa-truck fa-fw" aria-hidden="true"></i>&nbsp; ' + PontosMapas[i].descricao + '</a>');
+
+                    var htmlButton = '<div class="btn-group">\
+                        <button type="button" class="btn btn-default action-maps ativo veiculos" data-id="' + PontosMapas[i].id + '">\
+                            <i class="fa fa-user fa-fw" aria-hidden="true"></i>&nbsp; \
+                            ' + PontosMapas[i].descricao + '</button >\
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">\
+                            <span class="caret"></span>\
+                            <span class="sr-only">Toggle Dropdown</span>\
+                        </button>\
+                        <ul class="dropdown-menu">\
+                            <li><a href="#">Detalhe</a></li>\
+                        </ul>\
+                    </div>';
+
+                    //$('#Veiculos').find('.list-group').append(htmlButton);
+                }
+            }
+        }
+
+        $(document).on('click', '.action-maps', function () {
+
+            var id = parseInt($(this).attr('data-id'));
+
+            for (var i = 0; i < PontosMapas.length; i++) {
+                if (PontosMapas[i].id == id) {
+
+                    if ($(this).hasClass('ativo')) {
+                        $(this).removeClass('ativo');
+
+                        PontosMapas[i].layer.setMap(undefined);
+                        mapaConfig.setZoom(13);
+
+                    } else {
+                        $(this).addClass('ativo');
+
+                        PontosMapas[i].layer = AdicionarLocal(PontosMapas[i]);
+                    }
+                }
+            }
+        });
+
+        $(document).on('mouseover', '.action-maps', function () {
+
+            var id = parseInt($(this).attr('data-id'));
+
+            for (var i = 0; i < PontosMapas.length; i++) {
+                if (PontosMapas[i].id == id) {
+
+                    if ($(this).hasClass('ativo')) {
+                        mapaConfig.setCenter(PontosMapas[i].latitude, PontosMapas[i].longitude);
+                        mapaConfig.setZoom(15)
+                    }
+                }
+            }
+        });
+
+        $(document).on('mouseover', '.gmaps-overlay', function () {
+            alert('teste');
+            var id = parseInt($(this).attr('data-id'));
+            $('.action-maps[data-id=' + id + ']').css("color", "red");
+        });
+        $(document).on('mouseout', '.gmaps-overlay', function () {
+
+            var id = parseInt($(this).attr('data-id'));
+            $('.action-maps[data-id=' + id + ']').css("color", "");
+        });
+
+        function CarregarPontosMapas() {
+
+            $.ajax({
+                type: "POST",
+                url: rootUrl + 'Rastreamento/CarregarTodosPontosMapa',
+                dataType: "json",
+                error: function (json) {
+                    Alerta("Não foi possível configurar a caixa.", "Atenção", "error");
+                },
+                success: function (json) {
+
+                    var result = eval(json);
+
+                    if (result == undefined) {
+                        Alerta('Ocorreu um erro ao abonar o documento.', '', 'warning');
+                        return;
+                    }
+                    if (result.Sucesso == false) {
+                        Alerta(result.Mensagem, '', 'warning');
+                        return;
+                    }
+
+                    PontosMapas = result.data;
+
+                    ExibirPontosMapas();
+                }
+            });
+        }
+    </script>
+}
