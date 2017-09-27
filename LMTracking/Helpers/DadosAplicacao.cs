@@ -23,11 +23,32 @@ namespace LMTracking.Helpers
             new PontosMapa(){ ID= 3, Latitude= -23.537384, Longitude= -46.720805, TipoPonto= 1, Descricao= "Fernando Coutinho" },
             new PontosMapa(){ ID= 4, Latitude= -23.526327, Longitude= -46.713252, TipoPonto= 1, Descricao= "Juliana Couto" },
             new PontosMapa(){ ID= 5, Latitude= -23.548065, Longitude= -46.748652, TipoPonto= 1, Descricao= "Fatima Bernardes" },
-            new PontosMapa(){ ID= 6, Latitude= -23.525142, Longitude= -46.765459, TipoPonto= 1, Descricao= "CVT - 4494" },
-            new PontosMapa(){ ID= 7, Latitude= -23.528604, Longitude= -46.773870, TipoPonto= 1, Descricao= "DUS - 4668" },
-            new PontosMapa(){ ID= 8, Latitude= -23.532736, Longitude= -46.763956, TipoPonto= 1, Descricao= "AAI - 7984" },
+            new PontosMapa(){ ID= 6, Latitude= -23.525142, Longitude= -46.765459, TipoPonto= 2, Descricao= "CVT - 4494" },
+            new PontosMapa(){ ID= 7, Latitude= -23.528604, Longitude= -46.773870, TipoPonto= 2, Descricao= "DUS - 4668" },
+            new PontosMapa(){ ID= 8, Latitude= -23.532736, Longitude= -46.763956, TipoPonto= 2, Descricao= "AAI - 7984" },
             new PontosMapa(){ ID= 9, Latitude= -23.514832, Longitude= -46.753356, TipoPonto= 2, Descricao= "PPA - 1150" },
             new PontosMapa(){ ID= 0, Latitude= -23.540260, Longitude= -46.719487, TipoPonto= 2, Descricao= "FUJ - 6657" }
         };
+
+        public static List<ProgramacaoEntrega> ListaProgramacaoEntrega = new List<ProgramacaoEntrega>
+        {
+            new ProgramacaoEntrega(){
+                ID = 1,
+                Apelido = "Teste 1",
+                Endereco = new List<ProgramacaoEntregaEndereco>(){
+                    new ProgramacaoEntregaEndereco() { ID = 1, Cliente = "Repom", Endereco= "Alameda Tocantins" },
+                    new ProgramacaoEntregaEndereco() { ID = 2, Cliente = "Bradesco", Endereco= "Alameda Rio Negro" }
+                }
+            },
+            new ProgramacaoEntrega(){
+                ID = 2,
+                Apelido = "Teste 2",
+                Endereco = new List<ProgramacaoEntregaEndereco>(){
+                    new ProgramacaoEntregaEndereco() { ID = 3, Cliente = "Outback", Endereco= "Avenida Paulista" },
+                    new ProgramacaoEntregaEndereco() { ID = 4, Cliente = "Renner", Endereco= "Avenida Nações Unidas" }
+                }
+            }
+        };
+
     }
 }

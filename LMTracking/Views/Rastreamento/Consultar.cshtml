@@ -1,11 +1,62 @@
-
+@model LMTracking.Models.PontosMapa
 @{
-    ViewData["Title"] = "Consultar";
+    ViewBag.Title = "Consultar";
 }
 
-<h2>Consultar</h2>
 
+<style>
+    .gmaps-overlay_arrow.above {
+        bottom: -15px;
+        border-left: 16px solid transparent;
+        border-right: 16px solid transparent;
+    }
 
+    .gmaps-overlay {
+        display: block;
+        text-align: center;
+        color: #fff;
+        font-size: 12px;
+        line-height: 15px;
+        border-radius: 4px;
+        padding: 10px 10px;
+    }
+
+    .motoristas.gmaps-overlay {
+        background: #ab8ce4;
+    }
+
+    .motoristas.gmaps-overlay_arrow.above {
+        border-top: 16px solid #ab8ce4;
+    }
+
+    .veiculos.gmaps-overlay {
+        background: #03a9f3;
+    }
+
+    .veiculos.gmaps-overlay_arrow.above {
+        border-top: 16px solid #03a9f3;
+    }
+
+    .text-left {
+        text-align: left;
+    }
+</style>
+
+<div class="row bg-title">
+    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+        <h4 class="page-title">Consultar</h4>
+    </div>
+    <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+        <ol class="breadcrumb">
+            <li><a href="#">LM Tracking</a></li>
+            <li><a href="/Rastreamento/Index">Rastreamento</a></li>
+            <li class="active">Consultar</li>
+
+        </ol>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
 <div class="row">
     <div class="col-md-8 col-lg-9 col-sm-12">
         <div class="white-box">
@@ -13,56 +64,102 @@
         </div>
     </div>
 
-    <div class="col-md-4 col-lg-3 col-sm-12" id="PontosMapa">
+    <div class="col-md-4 col-lg-3 col-sm-12" id="PontosMapa" style="display:none;">
+
 
         <div class="white-box">
             <div class="row" id="Motoristas">
                 <h3 class="box-title">Motoristas</h3>
-
-                <div class="btn-group col-sm-12">
-                    <button type="button" class="btn btn-default col-sm-10 text-left">
-                        <i class="fa fa-user fa-fw" aria-hidden="true"></i>&nbsp;
-                        Action
-                    </button>
-
-                    <button type="button" class="btn btn-default col-sm-2 dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span class="caret"></span>
-                        <span class="sr-only">Toggle Dropdown</span>
-                    </button>
-
-                    <ul class="dropdown-menu">
-                        <li><a href="#">Detalhe</a></li>
-                    </ul>
-                </div>
-
             </div>
-
-
-        </div>
-    </div>
-
-    <div class="col-md-4 col-lg-3 col-sm-12" id="PontosMapa">
-
-        <div class="white-box">
-            <div class="row" id="Motoristas">
-                <h3 class="box-title">Motoristas</h3>
-
-                <div class="btn-group">
-                    <button type="button" class="btn btn-default" style="width:100%;">
-                        Select an Option
-                    </button>
-                    <button type="button" class="btn btn-default" style="position:absolute;top:0;right:0;">
-                        <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">Detalhe</a></li>
-                    </ul>
-                </div>
-
+            <div class="row" id="Veiculos">
+                <h3 class="box-title">Veiculos</h3>
             </div>
-
-
         </div>
     </div>
 </div>
 
+@section scripts {
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBmT5XSyVzsfnSFhxLwzup_-zgW3xa0lhI&callback=initMap"></script>
+    <script src="~/lib/gmaps/gmaps.js"></script>
+    <script>
+
+        $(document).ready(function () {
+            CalcularHeightMapa();
+
+            InicializarConfiguracoesMapa();
+            
+            var local = {};
+
+            local.tipoPonto = @Model.TipoPonto;
+            local.latitude = @Model.Latitude.ToString().Replace(",", ".");
+            local.longitude =@Model.Longitude.ToString().Replace(",", ".");
+            local.id = @Model.ID;
+            local.descricao= '@Model.Descricao';
+
+            AdicionarLocal(local);
+        });
+
+        $(window).resize(function () {
+            CalcularHeightMapa();
+        });
+
+        function CalcularHeightMapa() {
+
+            if ($('#PontosMapa').height() > $(window).height() - 280) {
+                $('.divmapa').height($('#PontosMapa').height());
+            }
+            else {
+                $('.divmapa').height($(window).height() - 280);
+            }
+
+            if (mapaConfig != undefined) {
+                // (the 'map' here is the result of the created 'var map = ...' above)
+                google.maps.event.trigger(mapaConfig, "resize");
+            }
+
+        }
+
+        var mapaConfig;
+        var PontosMapas = {};
+
+
+        function InicializarConfiguracoesMapa() {
+
+            var latitude =  @Model.Latitude.ToString().Replace(",", ".");
+            var longitude = @Model.Longitude.ToString().Replace(",", ".");
+
+            mapaConfig = new GMaps({
+                el: '#overlayermap',
+                lat: latitude,
+                lng: longitude,
+                zoom: 13,
+                panControl: false,
+                scrollwheel: true,
+                streetViewControl: false,
+                mapTypeControl: false,
+                overviewMapControl: false
+            });
+        }
+
+        function AdicionarLocal(local) {
+            if (mapaConfig == undefined) {
+                InicializarConfiguracoesMapa();
+            }
+
+            var cssClass = 'motoristas';
+            var icone = '<i class="fa fa-user"></i>'; // Motoristas
+            if (local.tipoPonto == 2) {
+                cssClass = 'veiculos';
+                icone = '<i class="fa fa-truck"></i>';  // Veiculos
+            }
+
+            return mapaConfig.drawOverlay({
+                lat: local.latitude,
+                lng: local.longitude,
+                layer: 'overlayLayer',
+                content: '<div class="gmaps-overlay ' + cssClass + '" data-id="' + local.id + '">' + icone + ' ' + local.descricao + '<div class="gmaps-overlay_arrow above ' + cssClass + '"></div></div>',
+            });
+        }
+        
+    </script>
+}

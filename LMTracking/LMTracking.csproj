@@ -27,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Views\ProgramacaoEntrega\" />
     <Folder Include="Views\Tracking\" />
     <Folder Include="wwwroot\lib\bootstrap-extension\" />
     <Folder Include="wwwroot\lib\template\" />

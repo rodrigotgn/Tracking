@@ -15,9 +15,11 @@ namespace LMTracking.Controllers
             return View();
         }
 
-        public IActionResult Consultar()
+        public IActionResult Consultar(Int32 ID)
         {
-            return View();
+            var dados = DadosAplicacao.ListaPontosMapa.SingleOrDefault(p => p.ID == ID);
+
+            return View(dados);
         }
 
         [HttpPost]

@@ -34,29 +34,127 @@
         border-top: 16px solid #03a9f3;
     }
 
-    .motoristas.ativo.action-maps {
+    .btn-motorista {
+        font-weight: 300;
+        margin-top: 0px;
+        background-color: #fff;
+        border: 1px solid #ddd;
+    }
+        .btn-motorista:focus {
+            /*color: #fff;*/
+            background-color: #fff;
+            border: 1px solid #ddd;
+            opacity: 1;
+        }
+        .btn-motorista.ativo {
+            color: #fff;
+            background: #ab8ce4;
+            border-color: #ab8ce4;
+        }
+            .btn-motorista.ativo:hover {
+                color: #fff;
+                background: #77629f;
+                border-color: #77629f;
+                opacity: 1;
+            }
+            .btn-motorista.ativo:focus {
+                color: #fff;
+                background: #ab8ce4;
+                border-color: #ab8ce4;
+                opacity: 1;
+            }
+
+    .btn-motorista-detalhe {
+        font-weight: 300;
+        margin-top: 0px;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        margin-left: 0px;
+    }
+
+    .btn-motorista-detalhe.ativo {
+        color: #fff;
         background: #ab8ce4;
         border-color: #ab8ce4;
-        color: #fff;
-        font-weight:300;
     }
-
-        .motoristas.ativo.action-maps:hover {
-            background: #8870b6;
-            border-color: #8870b6;
+        .btn-motorista-detalhe.ativo:hover {
+            color: #fff;
+            background: #77629f;
+            border-color: #77629f;
+            opacity: 1;
+        }
+        .btn-motorista-detalhe.ativo:focus {
+            color: #fff;
+            background: #77629f;
+            border-color: #77629f;
+            opacity: 1;
         }
 
-    .veiculos.ativo.action-maps {
-        background: #03a9f3;
-        border-color: #03a9f3;
+
+    .btn-veiculo {
+        font-weight: 300;
+        margin-top: 0px;
+        background-color: #fff;
+        border: 1px solid #ddd;
     }
 
-        .veiculos.ativo.action-maps:hover {
-            background: #0298da;
-            border-color: #0298da;
+        .btn-veiculo:focus {
+            /*color: #fff;*/
+            background-color: #fff;
+            border: 1px solid #ddd;
+            opacity: 1;
         }
 
-    #Motoristas {
+        .btn-veiculo.ativo {
+            color: #fff;
+            background: #03a9f3;
+            border-color: #03a9f3;
+        }
+
+            .btn-veiculo.ativo:hover {
+                color: #fff;
+                background: #0287c2;
+                border-color: #0287c2;
+                opacity: 1;
+            }
+
+            .btn-veiculo.ativo:focus {
+                color: #fff;
+                background: #0287c2;
+                border-color: #0287c2;
+                opacity: 1;
+            }
+
+    .btn-veiculo-detalhe {
+        font-weight: 300;
+        margin-top: 0px;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        margin-left: 0px;
+    }
+
+        .btn-veiculo-detalhe.ativo {
+            color: #fff;
+            background: #03a9f3;
+            border-color: #03a9f3;
+        }
+
+            .btn-veiculo-detalhe.ativo:hover {
+                color: #fff;
+                background: #0287c2;
+                border-color: #0287c2;
+                opacity: 1;
+            }
+
+            .btn-veiculo-detalhe.ativo:focus {
+                color: #fff;
+                background: #0287c2;
+                border-color: #0287c2;
+                opacity: 1;
+            }
+
+
+    /*#Motoristas {
         max-height: 200px;
         transition: max-height 0.15s ease-out;
         overflow: hidden;
@@ -76,7 +174,7 @@
         #Veiculos:hover {
             max-height: 500px;
             transition: max-height 0.25s ease-in;
-        }
+        }*/
 
     .text-left {
         text-align: left;
@@ -105,6 +203,7 @@
 
     <div class="col-md-4 col-lg-3 col-sm-12" id="PontosMapa">
 
+        
         <div class="white-box">
             <div class="row" id="Motoristas">
                 <h3 class="box-title">Motoristas</h3>
@@ -114,9 +213,9 @@
             </div>
             <div class="row" id="Veiculos">
                 <h3 class="box-title">Veiculos</h3>
-                <div class="list-group">
+                @*<div class="list-group">
                     <a href="#" class="list-group-item action-maps active" data-id="1">Cras justo odio</a>
-                </div>
+                </div>*@
             </div>
         </div>
     </div>
@@ -135,7 +234,7 @@
 
             CarregarPontosMapas();
         });
-
+         
         $(window).resize(function () {
             CalcularHeightMapa();
         });
@@ -210,38 +309,45 @@
                     // $('#Motoristas').find('.list-group').append('<a href="#" class="list-group-item action-maps active motoristas" data-id="' + PontosMapas[i].id + '"><i class="fa fa-user fa-fw" aria-hidden="true"></i>&nbsp; ' + PontosMapas[i].descricao + '</a>');
 
                     var htmlButton = '\
-                        <div class="btn-group col-sm-12">\
-                            <button type="button" class="btn btn-default col-sm-10 text-left action-maps ativo motoristas" data-id="' + PontosMapas[i].id + '">\
+                        <div class="btn-group btn-group-motorista ativo" style="width:100%;">\
+                            <button type="button" class="btn-motorista btn btn-default btn-outline col-sm-10 text-left action-maps ativo motoristas" data-id="' + PontosMapas[i].id + '">\
                                 <i class="fa fa-user fa-fw" aria-hidden="true"></i>&nbsp; \
-                                ' + PontosMapas[i].descricao + '</button >\
-                                <button type="button" class="btn btn-default col-sm-2 action-maps ativo motoristas dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">\
+                                ' + PontosMapas[i].descricao + '\
+                            </button >\
+                            <button type="button" class="btn-motorista-detalhe btn-detalhe btn btn-default btn-outline col-sm-2 ativo motoristas dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">\
                                 <span class="caret"></span>\
                                 <span class="sr-only">Toggle Dropdown</span>\
                             </button>\
-                            <ul class="dropdown-menu">\
-                                <li><a href="#">Detalhe</a></li>\
+                            <ul class="dropdown-menu dropdown-menu-right">\
+                                <li>\
+                                    <a href="/Rastreamento/Consultar/'+ PontosMapas[i].id+'">Detalhe</a>\
+                                </li>\
                             </ul>\
                         </div>';
 
                     $('#Motoristas').append(htmlButton);
                 } else {
-                    $('#Veiculos').find('.list-group').append('<a href="#" class="list-group-item action-maps ativo active veiculos" data-id="' + PontosMapas[i].id + '"><i class="fa fa-truck fa-fw" aria-hidden="true"></i>&nbsp; ' + PontosMapas[i].descricao + '</a>');
+                    //$('#Veiculos').find('.list-group').append('<a href="#" class="list-group-item action-maps ativo active veiculos" data-id="' + PontosMapas[i].id + '"><i class="fa fa-truck fa-fw" aria-hidden="true"></i>&nbsp; ' + PontosMapas[i].descricao + '</a>');
 
-                    var htmlButton = '<div class="btn-group">\
-                        <button type="button" class="btn btn-default action-maps ativo veiculos" data-id="' + PontosMapas[i].id + '">\
-                            <i class="fa fa-user fa-fw" aria-hidden="true"></i>&nbsp; \
-                            ' + PontosMapas[i].descricao + '</button >\
-                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">\
-                            <span class="caret"></span>\
-                            <span class="sr-only">Toggle Dropdown</span>\
-                        </button>\
-                        <ul class="dropdown-menu">\
-                            <li><a href="#">Detalhe</a></li>\
-                        </ul>\
-                    </div>';
+                    var htmlButton = '\
+                        <div class="btn-group btn-group-veiculo ativo" style="width:100%;">\
+                            <button type="button" class="btn-veiculo btn btn-default btn-outline col-sm-10 text-left action-maps ativo veiculos" data-id="' + PontosMapas[i].id + '">\
+                                <i class="fa fa-user fa-fw" aria-hidden="true"></i>&nbsp; \
+                                ' + PontosMapas[i].descricao + '\
+                            </button >\
+                            <button type="button" class="btn-veiculo-detalhe btn-detalhe btn btn-default btn-outline col-sm-2 ativo veiculos dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">\
+                                <span class="caret"></span>\
+                                <span class="sr-only">Toggle Dropdown</span>\
+                            </button>\
+                            <ul class="dropdown-menu dropdown-menu-right dropup">\
+                                <li><a href="#">Detalhe</a></li>\
+                            </ul>\
+                        </div>';
 
-                    //$('#Veiculos').find('.list-group').append(htmlButton);
+                    $('#Veiculos').append(htmlButton);
                 }
+
+                $('.dropdown-toggle').dropdown();
             }
         }
 
@@ -254,13 +360,17 @@
 
                     if ($(this).hasClass('ativo')) {
                         $(this).removeClass('ativo');
+                        $(this).closest('.btn-group').removeClass('ativo');
+                        $(this).closest('.btn-group').find('.btn-detalhe').removeClass('ativo');
 
                         PontosMapas[i].layer.setMap(undefined);
                         mapaConfig.setZoom(13);
 
                     } else {
                         $(this).addClass('ativo');
-
+                        $(this).closest('.btn-group').addClass('ativo');
+                        $(this).closest('.btn-group').find('.btn-detalhe').addClass('ativo');
+                        
                         PontosMapas[i].layer = AdicionarLocal(PontosMapas[i]);
                     }
                 }
