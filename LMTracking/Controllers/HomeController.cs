@@ -11,9 +11,9 @@ namespace LMTracking.Controllers
     {
         public IActionResult Index()
         {
-            // Adiciona o Usuario na sessão.
-            var user = DadosAplicacao.ListaUsuarios.Find(p => p.ID == 2);
-            HttpContext.NovoUsuarioLogado(user);
+            //// Adiciona o Usuario na sessão.
+            //var user = DadosAplicacao.ListaUsuarios.Find(p => p.ID == 2);
+            //HttpContext.NovoUsuarioLogado(user);
             
             if (HttpContext.RetornaUsuarioLogado() == null)
             {

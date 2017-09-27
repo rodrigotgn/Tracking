@@ -12,11 +12,21 @@ namespace LMTracking.Controllers
     {
         public IActionResult Index()
         {
+            if (HttpContext.RetornaUsuarioLogado() == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             return View();
         }
 
         public IActionResult Consultar(Int32 ID)
         {
+            if (HttpContext.RetornaUsuarioLogado() == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             var dados = DadosAplicacao.ListaPontosMapa.SingleOrDefault(p => p.ID == ID);
 
             return View(dados);
