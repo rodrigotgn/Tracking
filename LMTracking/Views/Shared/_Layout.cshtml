@@ -1,6 +1,6 @@
 ﻿@inject Microsoft.ApplicationInsights.AspNetCore.JavaScriptSnippet JavaScriptSnippet
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
@@ -12,8 +12,9 @@
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
 
         <link href="~/lib/bootstrap-extension/css/bootstrap-extension.css" rel="stylesheet">
+        <link href="~/lib/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css" rel="stylesheet" />
+
         <!-- Menu CSS -->
-        @*<link href="~/lib/sidebar-nav/dist/sidebar-nav.min.css" rel="stylesheet">*@
         <link href="~/lib/metisMenu/dist/metisMenu.css" rel="stylesheet" />
 
         <!-- toast CSS -->
@@ -27,6 +28,9 @@
         <link href="~/lib/template/css/style.css" rel="stylesheet">
         <!-- color CSS -->
         <link href="~/lib/template/css/colors/default.css" id="theme" rel="stylesheet">
+        
+        <!-- sweetalert2 CSS -->
+        <link href="~/lib/sweetalert2/dist/sweetalert2.css" rel="stylesheet" />
 
         <link rel="stylesheet" href="~/css/site.css" />
 
@@ -35,11 +39,35 @@
 
     </environment>
     <environment names="Staging,Production">
+
         <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
               asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
+        <link href="~/lib/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css" rel="stylesheet" />
+
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
-        <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' rel='stylesheet' type='text/css' asp-append-version="true">
+        
+        <!-- Menu CSS -->
+        <link rel="stylesheet" href="~/lib/metisMenu/dist/metisMenu.css" asp-append-version="true"  />
+
+        <!-- toast CSS -->
+        <link rel="stylesheet" href="~/lib/toast-master/css/jquery.toast.css" asp-append-version="true" />
+        <!-- morris CSS -->
+        <link rel="stylesheet" href="~/lib/morris.js/morris.css" asp-append-version="true" />
+
+        <!-- animation CSS -->
+        <link rel="stylesheet" href="~/lib/template/css/animate.css" asp-append-version="true" />
+        <!-- Custom CSS -->
+        <link rel="stylesheet" href="~/lib/template/css/style.css" asp-append-version="true" />
+        <!-- color CSS -->
+        <link rel="stylesheet" href="~/lib/template/css/colors/default.css" id="theme" asp-append-version="true" />
+
+        <!-- sweetalert2 CSS -->
+        <link rel="stylesheet" href="~/lib/sweetalert2/dist/sweetalert2.css" asp-append-version="true" />
+
+        <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+        <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' type='text/css' asp-append-version="true">
     </environment>
 
     @Html.Raw(JavaScriptSnippet.FullScript)
@@ -73,36 +101,14 @@
 
 
 
-    @*<!-- Bootstrap Core JavaScript -->
-        <script src="bootstrap/dist/js/tether.min.js"></script>
-        <script src="bootstrap/dist/js/bootstrap.min.js"></script>
-
-
-        <!--Counter js -->
-        <script src="../plugins/bower_components/waypoints/lib/jquery.waypoints.js"></script>
-        <script src="../plugins/bower_components/counterup/jquery.waypoints.min.js"></script>
-
-        <!-- Sparkline chart JavaScript -->
-        <script src="../plugins/bower_components/jquery-sparkline/jquery.sparkline.min.js"></script>
-        <script src="../plugins/bower_components/jquery-sparkline/jquery.charts-sparkline.js"></script>
-        <!--Style Switcher -->
-        <script src="../plugins/bower_components/styleswitcher/jQuery.style.switcher.js"></script>*@
-
-
-
-
-
-
-
-
-
     <environment names="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
         <script src="~/lib/bootstrap-extension/js/bootstrap-extension.min.js"></script>
 
+        <script src="~/lib/bootstrap-datepicker/dist/js/bootstrap-datepicker.js"></script>
+
         <!-- Menu Plugin JavaScript -->
-        @*<script src="~/lib/sidebar-nav/dist/sidebar-nav.min.js"></script>*@
         <script src="~/lib/metisMenu/dist/metisMenu.js"></script>
 
         <!--slimscroll JavaScript -->
@@ -118,12 +124,18 @@
 
         <!-- Custom Theme JavaScript -->
         <script src="~/lib/template/js/custom.min.js"></script>
-        @*<script src="~/lib/template/js/dashboard1.js"></script>*@
 
-        <!-- Sparkline chart JavaScript -->
+        <!-- Toast JavaScript -->
         <script src="~/lib/toast-master/js/jquery.toast.js"></script>
+        
+        <!-- Sweetalert2 JavaScript -->
+        <script src="~/lib/sweetalert2/dist/sweetalert2.js"></script>
 
         <script src="~/js/site.js" asp-append-version="true"></script>
+
+        <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBmT5XSyVzsfnSFhxLwzup_-zgW3xa0lhI"></script>
+        <script src="~/lib/gmaps/gmaps.js"></script>
+
     </environment>
     <environment names="Staging,Production">
         <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
@@ -138,7 +150,36 @@
                 crossorigin="anonymous"
                 integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">
         </script>
+
+        <script src="~/lib/bootstrap-datepicker/dist/js/bootstrap-datepicker.js"></script>
+
+        <!-- Menu Plugin JavaScript -->
+        <script src="~/lib/metisMenu/dist/metisMenu.js" asp-append-version="true"></script>
+
+        <!--slimscroll JavaScript -->
+        <script src="~/lib/template/js/jquery.slimscroll.js" asp-append-version="true"></script>
+
+        <!--Wave Effects -->
+        <script src="~/lib/template/js/waves.js" asp-append-version="true"></script>
+
+        <!--Morris JavaScript -->
+        <script src="~/lib/raphael/raphael.js" asp-append-version="true"></script>
+        <script src="~/lib/eve-raphael/eve.js" asp-append-version="true"></script>
+        <script src="~/lib/morris.js/morris.js" asp-append-version="true"></script>
+
+        <!-- Custom Theme JavaScript -->
+        <script src="~/lib/template/js/custom.min.js" asp-append-version="true"></script>
+
+        <!-- Toast JavaScript -->
+        <script src="~/lib/toast-master/js/jquery.toast.js" asp-append-version="true"></script>
+
+        <!-- Sweetalert2 JavaScript -->
+        <script src="~/lib/sweetalert2/dist/sweetalert2.js" asp-append-version="true"></script>
+
         <script src="~/js/site.min.js" asp-append-version="true"></script>
+
+        <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBmT5XSyVzsfnSFhxLwzup_-zgW3xa0lhI"></script>
+        <script src="~/lib/gmaps/gmaps.js"></script>
     </environment>
 
 
@@ -150,17 +191,17 @@
 
 
         $(document).ready(function () {
-            $.toast({
-                heading: 'Welcome to Elite admin',
-                text: 'Use the predefined ones, or specify a custom position object.',
-                position: 'top-right',
-                loaderBg: '#ff6849',
-                icon: 'info',
-                hideAfter: 3500,
+            //$.toast({
+            //    heading: 'Welcome to Elite admin',
+            //    text: 'Use the predefined ones, or specify a custom position object.',
+            //    position: 'top-right',
+            //    loaderBg: '#ff6849',
+            //    icon: 'info',
+            //    hideAfter: 3500,
 
-                stack: 6
-            });
-
+            //    stack: 6
+            //});
+            
             $('.dropdown-toggle').dropdown();
         });
 

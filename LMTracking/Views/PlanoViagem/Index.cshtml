@@ -1,0 +1,444 @@
+﻿@{
+    ViewBag.Title = "Incluir";
+}
+
+
+<div class="row bg-title">
+    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+        <h4 class="page-title">Cadastrar</h4>
+    </div>
+    <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+        <ol class="breadcrumb">
+            <li><a href="#">LM Tracking</a></li>
+            <li><a href="/Rastreamento/Index">Rastreamento</a></li>
+            <li class="active">Cadastrar</li>
+        </ol>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="white-box">
+
+            <div class="row">
+                <div class="col-md-4 m-b-10" ">
+                    <div class="form-group">
+                        <label class="col-md-12">Condutor</label>
+                        <div class="col-md-12">
+                            <input type="text" id="txtCondutor" placeholder="" tabindex="1" class="form-control form-control-line">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 m-b-10">
+                    <div class="form-group">
+                        <label class="col-md-12">Veiculos</label>
+                        <div class="col-md-12">
+                            <input type="text" id="txtVeiculos" placeholder="" tabindex="2" class="form-control form-control-line">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-md-offset-1 m-b-30">
+                    <div class="form-group">
+                        <label class="col-md-12">Data prevista de saida</label>
+                        <div class="col-md-12">
+                            <input type="text" id="datepicker-autoclose" placeholder="" tabindex="3" class="form-control form-control-line">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row m-b-20">
+                <div class="col-sm-6 col-md-6 m-b-10">
+                    <div class="form-group">
+                        <label class="col-md-12" for="selectProgramacaoViagem">Programação de Viagem</label>
+                        <select class="col-md-12 form-control-line" id="selectProgramacaoViagem" tabindex="4">
+                            <option></option>
+                        </select><span class="bar"></span>
+                    </div>
+                </div>
+                <div class="col-sm-2 col-md-2 m-b-10">
+                    <button type="button" tabindex="5" class="btn btn-default btn-sm btn-novo-trecho pull-right waves-effect waves-light m-r-10">Novo Trecho</button>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-5" id="div-endereco-entrega" style="display:none;">
+
+                    <div class="row" id="div-endereco-entrega-cadastro" style="display:none;">
+                        <div class="col-md-12 m-b-10">
+
+                            <div class="form-group">
+                                <label class="col-md-12">Cliente</label>
+                                <div class="col-md-12">
+                                    <input type="text" id="txtCliente" placeholder="" tabindex="6" class="form-control form-control-line">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 m-b-10">
+                            <div class="form-group">
+                                <label class="col-md-12">Endereço</label>
+                                <div class="col-md-12">
+                                    <input type="text" id="txtEndereco" placeholder="" tabindex="7" class="form-control form-control-line">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 m-b-30">
+
+                            <div class="col-sm-12 col-md-4">
+                                <div class="radio radio-success">
+                                    <input type="radio" name="radio" id="rdbEntrega" checked value="EntregaColeta">
+                                    <label for="rdbEntrega"> Entrega </label>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-4">
+                                <div class="radio radio-success">
+                                    <input type="radio" name="radio" id="rdbColeta" value="EntregaColeta">
+                                    <label for="rdbColeta"> Coleta </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12 col-xs-12 col-md-12">
+                            <div class="form-group">
+                                <button type="button" tabindex="8" class="btn btn-default btn-adicionar-endereco pull-right waves-effect waves-light m-r-10">Adicionar</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="table-responsive">
+                            <table class="table" id="table-endereco" style="display:none;">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Cliente</th>
+                                        <th>Endereço</th>
+                                        <th>Duração</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-7 coluna-mapa" style="display:none;">
+                    <div class="white-box">
+                        <div id="overlayermap" class="gmaps divmapa" style="min-height: 400px;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12 col-xs-12 col-md-12">
+                    <button type="button" tabindex="9" class="btn btn-success btn-salvar pull-right waves-effect waves-light m-r-10">Salvar</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+
+@section scripts {
+
+    <script>
+
+        $(document).ready(function () {
+
+            CarregarProgramacaoViagens();
+
+            //CalcularHeightMapa();
+
+            //InicializarConfiguracoesMapa();
+
+            @*var local = {};
+
+            local.tipoPonto = @Model.TipoPonto;
+            local.latitude = @Model.Latitude.ToString().Replace(",", ".");
+            local.longitude =@Model.Longitude.ToString().Replace(",", ".");
+            local.id = @Model.ID;
+            local.descricao = '@Model.Descricao';
+
+            AdicionarLocal(local);*@
+
+            $('#txtApelido').focus();
+
+            $('.btn-salvar').attr('disabled', true);
+
+            $('.mydatepicker, #datepicker').datepicker();
+            $('#datepicker-autoclose').datepicker({
+                autoclose: true,
+                todayHighlight: true
+            });
+        });
+
+        $(window).resize(function () {
+            CalcularHeightMapa();
+        });
+
+        function CalcularHeightMapa() {
+
+            if ($('#div-endereco-entrega').height() > 500) {
+                $('.divmapa').height(500);
+            }
+            else {
+                $('.divmapa').height($('#div-endereco-entrega').height());
+            }
+
+            if (mapaConfig != undefined) {
+                // (the 'map' here is the result of the created 'var map = ...' above)
+                google.maps.event.trigger(mapaConfig, "resize");
+            }
+
+        }
+
+        var mapaConfig;
+        var PontosMapas = {};
+
+
+        function InicializarConfiguracoesMapa() {
+
+            var latitude = -23.5291447;
+            var longitude = -46.7388459;
+
+            mapaConfig = new GMaps({
+                el: '#overlayermap',
+                lat: latitude,
+                lng: longitude,
+                zoom: 13,
+                panControl: false,
+                scrollwheel: true,
+                streetViewControl: false,
+                mapTypeControl: false,
+                overviewMapControl: false
+            });
+        }
+
+        function AdicionarLocal(local) {
+            if (mapaConfig == undefined) {
+                InicializarConfiguracoesMapa();
+            }
+
+            var cssClass = 'motoristas';
+            var icone = '<i class="fa fa-user"></i>'; // Motoristas
+            if (local.tipoPonto == 2) {
+                cssClass = 'veiculos';
+                icone = '<i class="fa fa-truck"></i>';  // Veiculos
+            }
+            icone = '';
+
+            return mapaConfig.drawOverlay({
+                lat: local.latitude,
+                lng: local.longitude,
+                layer: 'overlayLayer',
+                content: '<div class="gmaps-overlay ' + cssClass + '" data-id="' + local.id + '">' + icone + ' ' + local.descricao + '<div class="gmaps-overlay_arrow above ' + cssClass + '"></div></div>',
+            });
+        }
+
+        // Coordenadas que simulam uma pesquisa do endereço.
+        var dadosCoordenadas = [
+            { ID: 21, Latitude: -23.634557, Longitude: -46.784476, Utilizado: false },
+            { ID: 22, Latitude: -23.661026, Longitude: -46.778347, Utilizado: false },
+            { ID: 23, Latitude: -23.671914, Longitude: -46.741703, Utilizado: false },
+            { ID: 24, Latitude: -23.644278, Longitude: -46.688400, Utilizado: false },
+            { ID: 25, Latitude: -23.469705, Longitude: -46.709239, Utilizado: false }
+        ];
+
+        $(document).on('click', '.btn-adicionar-endereco', function () {
+
+            if ($('#txtCliente').val() != '' && $('#txtEndereco').val() != '') {
+
+                if ($('#table-endereco').is(':visible') == false) {
+                    $('#table-endereco').show();
+                }
+
+                var coordenada = dadosCoordenadas[0];
+                
+                dadosCoordenadas.shift();
+
+
+                var trecho = {
+                    ID: coordenada.ID,
+                    Latitude: coordenada.Latitude,
+                    Longitude: coordenada.Longitude,
+                    Endereco: $('#txtEndereco').val(),
+                    Cliente: $('#txtCliente').val()
+                };
+
+
+
+                AdicionarEndereco(trecho);
+
+                mapaConfig.setCenter(coordenada.Latitude, coordenada.Longitude);
+                mapaConfig.setZoom(13);
+
+                $('#txtCliente').val('');
+                $('#txtEndereco').val('');
+
+                $('#txtCliente').focus();
+            }
+        });
+
+
+        var dados = [
+            {
+                ID: 1,
+                Apelido: 'Teste 1',
+                Trechos: [
+                    { ID: 1, Latitude: -23.528743, Longitude: -46.739711, Endereco: 'Avenida João Rodrigues Ruiz', Cliente: 'Anthony Alexandre Oliveira' },
+                    { ID: 2, Latitude: -23.526452, Longitude: -46.735209, Endereco: 'Travessa Eugênio Hostos', Cliente: 'Marcelo Kaique dos Santos' },
+                    { ID: 3, Latitude: -23.537384, Longitude: -46.720805, Endereco: 'Rua Manuel Acosta', Cliente: 'Rafael Isaac Alves' }
+                ]
+            },
+            {
+                ID: 2,
+                Apelido: 'Teste 2',
+                Trechos: [
+                    { ID: 4, Latitude: -23.526327, Longitude: -46.713252, Endereco: 'Rua Primavera', Cliente: 'Lucas César Ribeiro' },
+                    { ID: 5, Latitude: -23.548065, Longitude: -46.748652, Endereco: 'Rua Trapoeraba', Cliente: 'Carlos Eduardo' },
+                    { ID: 6, Latitude: -23.525142, Longitude: -46.765459, Endereco: 'Rua Elói Porteli', Cliente: 'Enrico Yuri' },
+                    { ID: 7, Latitude: -23.528604, Longitude: -46.773870, Endereco: 'Rua Doutor Raymundo Gomes', Cliente: 'João Lucca' }
+                ]
+            },
+            {
+                ID: 3,
+                Apelido: 'Teste 3',
+                Trechos: [
+                    { ID: 8, Latitude: -23.532736, Longitude: -46.763956, Endereco: 'Rua Maria Cristina', Cliente: 'Julio Otávio Rodrigues' },
+                    { ID: 9, Latitude: -23.514832, Longitude: -46.753356, Endereco: 'Alameda das Perobas', Cliente: 'Vitor André dos Santos' },
+                    { ID: 10, Latitude: -23.540260, Longitude: -46.719487, Endereco: 'Rua Cuiabano', Cliente: 'Vitor Theo Moura' }
+                ]
+            }
+        ];
+
+        function AdicionarEndereco(trecho) {
+
+            var ID = $('#table-endereco>tbody').children().length + 1;
+
+            var tempo = ID * 10;
+
+            var html = '<tr>\
+                            <td>' + trecho.ID + '</td>\
+                            <td>' + trecho.Cliente + '</td>\
+                            <td>' + trecho.Endereco + '</td>\
+                            <td><span class="label label-info">' + tempo + ' min</span> </td>\
+                        </tr>';
+
+
+            $('#table-endereco>tbody').append(html);
+
+
+            var local = {};
+
+            local.tipoPonto = 1;
+            local.latitude = trecho.Latitude;
+            local.longitude = trecho.Longitude;
+            local.id = trecho.ID;
+            local.descricao = trecho.Cliente;
+
+            CalcularHeightMapa();
+            if ($('.coluna-mapa').is(':visible') == false) {
+                $('.coluna-mapa').show();
+                InicializarConfiguracoesMapa();
+            }
+
+            AdicionarLocal(local);
+        }
+
+        function CarregarProgramacaoViagens() {
+
+            for (var i = 0; i < dados.length; i++) {
+                var item = dados[i];
+
+                var html = '<option value="' + item.ID + '">' + item.Apelido + '</option>';
+
+
+                $('#selectProgramacaoViagem').append(html);
+            }
+        }
+
+        $(document).on('click', '.btn-salvar', function () {
+
+            if ($('#txtApelido').val() == '') {
+                AlertaEror('Atenção', 'Apelido não informado');
+                $('#txtApelido').focus();
+                return;
+            }
+
+            if ($('#table-endereco>tbody').children().length <= 0) {
+                AlertaEror('Atenção', 'Local de entrega não foi informado');
+                $('#txtCliente').focus();
+                return;
+            }
+
+            $('#txtApelido').val('');
+            $('#txtCliente').val('');
+            $('#txtEndereco').val('');
+            $('#table-endereco>tbody').children().remove();
+
+            $('#table-endereco').hide();
+            $('.coluna-mapa').hide();
+
+
+            swal({
+                title: 'Atenção',
+                text: 'Programação foi criada com sucesso!',
+                type: 'success',
+                confirmButtonText: 'Ok'
+            })
+        });
+
+
+        $(document).on('change', '#selectProgramacaoViagem', function () {
+
+            // remove o primeiro item, o item que nasce em branco.
+            $('#selectProgramacaoViagem').find('option:empty').remove();
+
+            // Habilita o botão para clique.
+            $('.btn-salvar').removeAttr('disabled');
+
+            $('#div-endereco-entrega').show();
+            $('#table-endereco').show();
+            $('#table-endereco>tbody').children().remove();
+
+            $('#div-endereco-entrega-cadastro').hide();
+
+
+            if (mapaConfig != undefined) {
+                mapaConfig.removeOverlays();
+            }
+
+
+
+            var programaViagemID = $(this).val();
+
+            var item = dados.find(function (index) { return index.ID == programaViagemID });
+
+            for (var i = 0; i < item.Trechos.length; i++) {
+                var trecho = item.Trechos[i];
+                AdicionarEndereco(trecho);
+            }
+        });
+
+
+        $(document).on('click', '.btn-novo-trecho', function () {
+            $('#div-endereco-entrega-cadastro').show();
+        });
+
+
+
+
+    </script>
+}

@@ -1,18 +1,17 @@
-@{
+ï»¿@{
     ViewBag.Title = "Incluir";
 }
 
 
 <div class="row bg-title">
     <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-        <h4 class="page-title">Consultar</h4>
+        <h4 class="page-title">Cadastrar</h4>
     </div>
     <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
         <ol class="breadcrumb">
             <li><a href="#">LM Tracking</a></li>
             <li><a href="/Rastreamento/Index">Rastreamento</a></li>
-            <li class="active">Consultar</li>
-
+            <li class="active">Cadastrar</li>
         </ol>
     </div>
     <!-- /.col-lg-12 -->
@@ -24,99 +23,107 @@
         <div class="white-box">
 
             <div class="row">
-                <div class="col-sm-12 col-xs-12">
+                <div class="col-sm-12 col-xs-12 m-b-40">
 
                     <div class="form-group">
                         <label class="col-md-12">Apelido</label>
                         <div class="col-md-12">
-                            <input type="text" id="txtApelido" placeholder="Johnathan Doe" class="form-control form-control-line">
+                            <input type="text" id="txtApelido" tabindex="1" placeholder="" class="form-control form-control-line">
                         </div>
                     </div>
 
                 </div>
             </div>
-        </div>
-    </div>
-</div>
-<div class="row">
-
-    <div class="col-md-6" id="div-endereco-entrega">
-        <div class="white-box">
 
             <div class="row">
-                <div class="col-sm-12 col-xs-12 col-md-12 m-b-10">
+                <div class="col-md-5" id="div-endereco-entrega">
 
-                    <div class="form-group">
-                        <label class="col-md-12">Cliente</label>
-                        <div class="col-md-12">
-                            <input type="text" id="txtCliente" placeholder="Johnathan Doe" class="form-control form-control-line">
+
+                    <div class="row">
+                        <div class="col-sm-12 col-xs-12 col-md-12 m-b-10">
+
+                            <div class="form-group">
+                                <label class="col-md-12">Cliente</label>
+                                <div class="col-md-12">
+                                    <input type="text" id="txtCliente" placeholder="" tabindex="2" class="form-control form-control-line">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12 col-xs-12 col-md-12 m-b-10">
+                            <div class="form-group">
+                                <label class="col-md-12">EndereÃ§o</label>
+                                <div class="col-md-12">
+                                    <input type="text" id="txtEndereco" placeholder="" tabindex="3" class="form-control form-control-line">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12 col-xs-12 col-md-12 m-b-30">
+
+                            <div class="col-sm-12 col-md-4">
+                                <div class="radio radio-success">
+                                    <input type="radio" name="radio" id="rdbEntrega" checked value="EntregaColeta">
+                                    <label for="rdbEntrega"> Entrega </label>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-4">
+                                <div class="radio radio-success">
+                                    <input type="radio" name="radio" id="rdbColeta" value="EntregaColeta">
+                                    <label for="rdbColeta"> Coleta </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12 col-xs-12 col-md-12">
+                            <div class="form-group">
+                                <button type="button" tabindex="4" class="btn btn-default btn-adicionar-endereco pull-right waves-effect waves-light m-r-10">Adicionar</button>
+                            </div>
                         </div>
                     </div>
+
+                    <div class="row">
+                        <div class="table-responsive">
+                            <table class="table" id="table-endereco" style="display:none;">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Cliente</th>
+                                        <th>EndereÃ§o</th>
+                                        <th>DuraÃ§Ã£o</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+
+                    </div>
+
                 </div>
 
-                <div class="col-sm-12 col-xs-12 col-md-12 m-b-30">
-                    <div class="form-group">
-                        <label class="col-md-12">Endereço</label>
-                        <div class="col-md-12">
-                            <input type="text" id="txtEndereco" placeholder="Johnathan Doe" class="form-control form-control-line">
-                        </div>
+                <div class="col-md-7 coluna-mapa" style="display:none;">
+                    <div class="white-box">
+                        <div id="overlayermap" class="gmaps divmapa"></div>
                     </div>
                 </div>
+            </div>
 
+            <div class="row">
                 <div class="col-sm-12 col-xs-12 col-md-12">
-                    <div class="form-group">
-                        <button type="button" class="btn btn-default btn-adicionar-endereco pull-right waves-effect waves-light m-r-10">Adicionar</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="table-responsive">
-                    <table class="table" id="table-endereco" style="display:none;">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Cliente</th>
-                                <th>Endereço</th>
-                                <th>Duração</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
-                </div>
-
-            </div>
-        </div>
-
-    </div>
-
-    <div class="col-md-6 coluna-mapa" style="display:none;">
-        <div class="white-box">
-            <div id="overlayermap" class="gmaps divmapa"></div>
-        </div>
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-12">
-        <div class="white-box">
-
-            <div class="row">
-                <div class="col-sm-12 col-xs-12 col-md-12">
-                    <button type="button" class="btn btn-success btn-salvar pull-right waves-effect waves-light m-r-10">Salvar</button>
+                    <button type="button" tabindex="5" class="btn btn-success btn-salvar pull-right waves-effect waves-light m-r-10">Salvar</button>
                 </div>
             </div>
 
         </div>
     </div>
 </div>
+
 
 
 
 
 @section scripts {
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBmT5XSyVzsfnSFhxLwzup_-zgW3xa0lhI&callback=initMap"></script>
-    <script src="~/lib/gmaps/gmaps.js"></script>
+
     <script>
 
         $(document).ready(function () {
@@ -130,9 +137,13 @@
             local.latitude = @Model.Latitude.ToString().Replace(",", ".");
             local.longitude =@Model.Longitude.ToString().Replace(",", ".");
             local.id = @Model.ID;
-            local.descricao= '@Model.Descricao';
+            local.descricao = '@Model.Descricao';
 
             AdicionarLocal(local);*@
+
+            $('#txtApelido').focus();
+
+            $('.btn-salvar').attr('disabled', true);
         });
 
         $(window).resize(function () {
@@ -141,15 +152,13 @@
 
         function CalcularHeightMapa() {
 
-            if ($('#div-endereco-entrega').height() > $(window).height() - 280) {
-                $('.divmapa').height($('#div-endereco-entrega').height());
+            if ($('#div-endereco-entrega').height() > 500) {
+                $('.divmapa').height(500);
             }
             else {
-                $('.divmapa').height($(window).height() - 280);
+                $('.divmapa').height($('#div-endereco-entrega').height());
             }
-
-            $('.divmapa').height($('#div-endereco-entrega').height());
-
+            
             if (mapaConfig != undefined) {
                 // (the 'map' here is the result of the created 'var map = ...' above)
                 google.maps.event.trigger(mapaConfig, "resize");
@@ -209,9 +218,9 @@
                     $('#table-endereco').show();
                 }
 
+                CalcularHeightMapa();
                 if ($('.coluna-mapa').is(':visible') == false) {
                     $('.coluna-mapa').show();
-                    CalcularHeightMapa();
                     InicializarConfiguracoesMapa();
                 }
 
@@ -219,6 +228,11 @@
 
                 $('#txtCliente').val('');
                 $('#txtEndereco').val('');
+
+                $('#txtCliente').focus();
+
+                // Habilita o botÃ£o para clique.
+                $('.btn-salvar').removeAttr('disabled');
             }
         });
 
@@ -251,7 +265,7 @@
                 { ID: 10, Latitude: -23.540260, Longitude: -46.719487 }];
 
             var local = {};
-            
+
             local.tipoPonto = 1;
             local.latitude = coordenadas[ID].Latitude;
             local.longitude = coordenadas[ID].Longitude;
@@ -265,13 +279,13 @@
         $(document).on('click', '.btn-salvar', function () {
 
             if ($('#txtApelido').val() == '') {
-                AlertaEror('Atenção', 'Apelido não informado');
+                AlertaEror('AtenÃ§Ã£o', 'Apelido nÃ£o informado');
                 $('#txtApelido').focus();
                 return;
             }
 
             if ($('#table-endereco>tbody').children().length <= 0) {
-                AlertaEror('Atenção', 'Local de entrega não foi informado');
+                AlertaEror('AtenÃ§Ã£o', 'Local de entrega nÃ£o foi informado');
                 $('#txtCliente').focus();
                 return;
             }
@@ -285,19 +299,15 @@
             $('.coluna-mapa').hide();
 
 
-            $.toast({
-                heading: 'Programação de Entrega foi salva com sucesso',
-                text: 'Atenção',
-                position: 'top-right',
-                loaderBg: '#ff6849',
-                icon: 'info',
-                hideAfter: 3500,
-
-                stack: 6
-            });
+            swal({
+                title: 'AtenÃ§Ã£o',
+                text: 'ProgramaÃ§Ã£o foi criada com sucesso!',
+                type: 'success',
+                confirmButtonText: 'Ok'
+            })
         });
 
-        function AlertaEror(heading, text){
+        function AlertaEror(heading, text) {
             $.toast({
                 heading: heading,
                 text: text,
@@ -310,8 +320,8 @@
             });
         }
 
-        
-        
+
+
 
 
     </script>

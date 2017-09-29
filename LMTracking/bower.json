@@ -8,7 +8,9 @@
     "jquery-validation-unobtrusive": "3.2.6",
     "morris.js": "morrisjs#0.5.1",
     "metisMenu": "v2.7.0",
-    "gmaps": "0.4.25"
+    "gmaps": "0.4.25",
+    "sweetalert2": "v6.9.1",
+    "bootstrap-datepicker": "v1.7.1"
   },
   "resolutions": {
     "mocha": "v3.5.3",

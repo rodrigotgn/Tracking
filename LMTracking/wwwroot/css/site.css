@@ -1,1 +1,6 @@
-﻿
+﻿.gmaps-overlay {
+    font-size: small;
+    width: 200px;
+    height: 40px;
+    padding: 0px;
+}
