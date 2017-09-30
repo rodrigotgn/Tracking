@@ -10,22 +10,24 @@ namespace LMTracking.Controllers
 {
     public class RastreamentoController : Controller
     {
+        [HttpGet]
         public IActionResult Index()
         {
-            if (HttpContext.RetornaUsuarioLogado() == null)
-            {
-                return RedirectToAction("Login", "Account");
-            }
+            //if (HttpContext.RetornaUsuarioLogado() == null)
+            //{
+            //    return RedirectToAction("Login", "Account");
+            //}
 
             return View();
         }
 
+        [HttpGet]
         public IActionResult Consultar(Int32 ID)
         {
-            if (HttpContext.RetornaUsuarioLogado() == null)
-            {
-                return RedirectToAction("Login", "Account");
-            }
+            //if (HttpContext.RetornaUsuarioLogado() == null)
+            //{
+            //    return RedirectToAction("Login", "Account");
+            //}
 
             var dados = DadosAplicacao.ListaPontosMapa.SingleOrDefault(p => p.ID == ID);
 
@@ -54,10 +56,10 @@ namespace LMTracking.Controllers
             return Json(retorno);
         }
 
-        public IActionResult CarregarPontosMapa(Int32 ID)
+        public IActionResult ConsultarPontoMapa(Int32 ID)
         {
             var retorno = new AjaxRetornoModel();
-
+            
             try
             {
                 var dados = DadosAplicacao.ListaPontosMapa.SingleOrDefault(p => p.ID == ID);

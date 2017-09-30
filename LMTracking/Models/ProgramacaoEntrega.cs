@@ -9,7 +9,7 @@ namespace LMTracking.Models
     {
         public Int32 ID { get; set; }
         public String Apelido { get; set; }
-        public List<ProgramacaoEntregaEndereco> Endereco { get; set; }
+        public List<ProgramacaoEntregaEndereco> Trechos { get; set; }
     }
 
     public class ProgramacaoEntregaEndereco
@@ -17,5 +17,8 @@ namespace LMTracking.Models
         public Int32 ID { get; set; }
         public String Cliente { get; set; }
         public String Endereco { get; set; }
+        public Double Latitude { get; set; }
+        public Double Longitude { get; set; }
+        public Int16 TipoPonto { get; set; }
     }
 }

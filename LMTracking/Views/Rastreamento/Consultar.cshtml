@@ -37,6 +37,22 @@
         border-top: 16px solid #03a9f3;
     }
 
+    .entrega-pendente.gmaps-overlay {
+        background: #fec107;
+    }
+
+    .entrega-pendente.gmaps-overlay_arrow.above {
+        border-top: 16px solid #fec107;
+    }
+
+    .entrega-completa.gmaps-overlay {
+        background: #00c292;
+    }
+
+    .entrega-completa.gmaps-overlay_arrow.above {
+        border-top: 16px solid #00c292;
+    }
+
     .text-left {
         text-align: left;
     }
@@ -64,39 +80,87 @@
         </div>
     </div>
 
-    <div class="col-md-4 col-lg-3 col-sm-12" id="PontosMapa" style="display:none;">
-
-
+    <div class="col-md-4 col-lg-3 col-xs-12">
         <div class="white-box">
-            <div class="row" id="Motoristas">
-                <h3 class="box-title">Motoristas</h3>
+            <div class="user-bg">
+                <img class="img-condutor" src="~/images/users/5.jpg" alt="user">
+                <div class="overlay-box">
+                    <div class="user-content">
+                        <a href="javascript:void(0)">
+                            <img alt="img" class="thumb-lg img-circle img-condutor" src="~/images/users/5.jpg">
+                        </a>
+                        <h4 class="text-white" id="user-name">User Name</h4>
+                        <h5 class="text-white">info@myadmin.com</h5>
+                    </div>
+                </div>
             </div>
-            <div class="row" id="Veiculos">
-                <h3 class="box-title">Veiculos</h3>
+            <div class="user-btm-box">
+                <div class="row">
+                    <div class="col-md-6 col-sm-6 text-center">
+                        <p class="text-purple">Completas</p>
+                        <h1>258</h1>
+                    </div>
+                    <div class="col-md-6 col-sm-6 text-center">
+                        <p class="text-blue">Pendentes</p>
+                        <h1>125</h1>
+                    </div>
+                    @*<div class="col-md-4 col-sm-4 text-center">
+                            <p class="text-danger"><i class="ti-dribbble"></i></p>
+                            <h1>556</h1>
+                        </div>*@
+                    <div class="col-md-12 col-sm-12">
+                        <h3 class="box-title">Atividades</h3>
+                        <ul class="feeds">
+                            <li>
+                                <div class="bg-success"><i class="fa fa-check text-white"></i></div> You have 4 pending tasks. <span class="text-muted">1 h</span>
+                            </li>
+                            <li>
+                                <div class="bg-success"><i class="fa fa-check text-white"></i></div> You have 4 pending tasks. <span class="text-muted">30 min</span>
+                            </li>
+                            <li>
+                                <div class="bg-success"><i class="fa fa-check text-white"></i></div> You have 4 pending tasks. <span class="text-muted">Agora mesmo</span>
+                            </li>
+                            <li>
+                                <div class="bg-warning"><i class="fa fa-clock-o text-white"></i></div> New order received.<span class="text-muted">Pendente</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="stats-row col-md-12 m-t-20 m-b-0 text-center">
+                        <div class="stat-item">
+                            <h6>Contato</h6> <b><i class="ti-mobile"></i> 011 99485-6512</b>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
 @section scripts {
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBmT5XSyVzsfnSFhxLwzup_-zgW3xa0lhI&callback=initMap"></script>
-    <script src="~/lib/gmaps/gmaps.js"></script>
+
     <script>
 
         $(document).ready(function () {
             CalcularHeightMapa();
 
             InicializarConfiguracoesMapa();
-            
+
             var local = {};
 
             local.tipoPonto = @Model.TipoPonto;
             local.latitude = @Model.Latitude.ToString().Replace(",", ".");
             local.longitude =@Model.Longitude.ToString().Replace(",", ".");
             local.id = @Model.ID;
-            local.descricao= '@Model.Descricao';
+            local.descricao = '@Model.Descricao';
+
+
+            $('.img-condutor').attr('src', '../../images/users/@(Model.ID).jpg');
+            $('#user-name').html('@Model.Descricao')
 
             AdicionarLocal(local);
+
+            CarregarPontosMapas();
         });
 
         $(window).resize(function () {
@@ -153,13 +217,95 @@
                 icone = '<i class="fa fa-truck"></i>';  // Veiculos
             }
 
+            //Entrega Pendente
+            if (local.tipoPonto == 3) {
+                cssClass = 'entrega-pendente';
+                icone = '<i class="fa fa-truck"></i>';  // Veiculos
+            }
+            //Entrega Completa
+            if (local.tipoPonto == 4) {
+                cssClass = 'entrega-completa';
+                icone = '<i class="fa fa-truck"></i>';  // Veiculos
+            }
+
             return mapaConfig.drawOverlay({
                 lat: local.latitude,
                 lng: local.longitude,
                 layer: 'overlayLayer',
-                content: '<div class="gmaps-overlay ' + cssClass + '" data-id="' + local.id + '">' + icone + ' ' + local.descricao + '<div class="gmaps-overlay_arrow above ' + cssClass + '"></div></div>',
+                content: '<div class="gmaps-overlay ' + cssClass + '" style="width: auto;" data-id="' + local.id + '">' + icone + ' ' + local.descricao + '<div class="gmaps-overlay_arrow above ' + cssClass + '"></div></div>',
             });
         }
-        
+
+
+        function CarregarPontosMapas() {
+
+            var dataToServer = {
+                ID: @Model.ID
+            };
+
+            $.ajax({
+                type: "POST",
+                url: rootUrl + 'Rastreamento/ConsultarPontoMapa',
+                dataType: "json",
+                data: dataToServer,
+                error: function (json) {
+                    Alerta("Não foi possível configurar a caixa.", "Atenção", "error");
+                },
+                success: function (json) {
+
+                    var result = eval(json);
+
+                    if (result == undefined) {
+                        Alerta('Ocorreu um erro ao abonar o documento.', '', 'warning');
+                        return;
+                    }
+                    if (result.Sucesso == false) {
+                        Alerta(result.Mensagem, '', 'warning');
+                        return;
+                    }
+
+                    PontosMapas2 = result.data.trechos;
+
+
+                    for (var i = 0; i < PontosMapas2.trechos.length; i++) {
+
+                        if (i + 1 <= PontosMapas2.trechos.length) {
+                            var inicio = PontosMapas2.trechos[i];
+                            var fim = PontosMapas2.trechos[i + 1];
+
+                            if (inicio != undefined && fim != undefined) {
+                                mapaConfig.drawRoute({
+                                    origin: [inicio.latitude, inicio.longitude],
+                                    destination: [fim.latitude, fim.longitude],
+                                    travelMode: 'driving',
+                                    strokeColor: '#131540',
+                                    strokeOpacity: 0.6,
+                                    strokeWeight: 6
+                                });
+                            }
+                        }
+                        PontosMapas2.trechos[i].descricao = i + 1;
+                        //PontosMapas2.trechos[i].tipoPonto = 2;
+                        AdicionarLocal(PontosMapas2.trechos[i]);
+                    }
+
+
+
+                }
+            });
+        }
+
+        function teste() {
+            mapaConfig.drawRoute({
+                origin: [-23.528743, -46.739711],
+                destination: [-23.540260, -46.719487],
+                travelMode: 'driving',
+                strokeColor: '#131540',
+                strokeOpacity: 0.6,
+                strokeWeight: 6
+            });
+
+        }
+
     </script>
 }

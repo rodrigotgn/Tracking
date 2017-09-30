@@ -41,5 +41,10 @@ namespace LMTracking.Controllers
         {
             return View();
         }
+
+        public IActionResult Teste()
+        {
+            return View();
+        }
     }
 }
