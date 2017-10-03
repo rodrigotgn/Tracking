@@ -74,13 +74,13 @@
 </div>
 <!-- /.row -->
 <div class="row">
-    <div class="col-md-8 col-lg-9 col-sm-12">
+    <div class="col-md-8 col-lg-8 col-sm-12">
         <div class="white-box">
             <div id="overlayermap" class="gmaps divmapa"></div>
         </div>
     </div>
 
-    <div class="col-md-4 col-lg-3 col-xs-12">
+    <div class="col-md-4 col-lg-4 col-xs-12">
         <div class="white-box">
             <div class="user-bg">
                 <img class="img-condutor" src="~/images/users/5.jpg" alt="user">
@@ -90,7 +90,7 @@
                             <img alt="img" class="thumb-lg img-circle img-condutor" src="~/images/users/5.jpg">
                         </a>
                         <h4 class="text-white" id="user-name">User Name</h4>
-                        <h5 class="text-white">info@myadmin.com</h5>
+                        <h5 class="text-white" id="user-telefone">info@myadmin.com</h5>
                     </div>
                 </div>
             </div>
@@ -98,21 +98,21 @@
                 <div class="row">
                     <div class="col-md-6 col-sm-6 text-center">
                         <p class="text-purple">Completas</p>
-                        <h1>258</h1>
+                        <h1 class="trechos-completos">258</h1>
                     </div>
                     <div class="col-md-6 col-sm-6 text-center">
                         <p class="text-blue">Pendentes</p>
-                        <h1>125</h1>
+                        <h1 class="trechos-incompletos">125</h1>
                     </div>
-                    @*<div class="col-md-4 col-sm-4 text-center">
-                            <p class="text-danger"><i class="ti-dribbble"></i></p>
-                            <h1>556</h1>
-                        </div>*@
                     <div class="col-md-12 col-sm-12">
                         <h3 class="box-title">Atividades</h3>
                         <ul class="feeds">
                             <li>
-                                <div class="bg-success"><i class="fa fa-check text-white"></i></div> You have 4 pending tasks. <span class="text-muted">1 h</span>
+                                <div class="bg-success">
+                                    <i class="fa fa-check text-white"></i>
+                                </div>
+                                You have 4 pending tasks.
+                                <span class="text-muted">1 h</span>
                             </li>
                             <li>
                                 <div class="bg-success"><i class="fa fa-check text-white"></i></div> You have 4 pending tasks. <span class="text-muted">30 min</span>
@@ -126,11 +126,11 @@
                         </ul>
                     </div>
 
-                    <div class="stats-row col-md-12 m-t-20 m-b-0 text-center">
+                    @*<div class="stats-row col-md-12 m-t-20 m-b-0 text-center">
                         <div class="stat-item">
                             <h6>Contato</h6> <b><i class="ti-mobile"></i> 011 99485-6512</b>
                         </div>
-                    </div>
+                    </div>*@
                 </div>
             </div>
         </div>
@@ -140,32 +140,211 @@
 @section scripts {
 
     <script>
-
+        
         $(document).ready(function () {
-            CalcularHeightMapa();
-
-            InicializarConfiguracoesMapa();
-
-            var local = {};
-
-            local.tipoPonto = @Model.TipoPonto;
-            local.latitude = @Model.Latitude.ToString().Replace(",", ".");
-            local.longitude =@Model.Longitude.ToString().Replace(",", ".");
-            local.id = @Model.ID;
-            local.descricao = '@Model.Descricao';
-
-
-            $('.img-condutor').attr('src', '../../images/users/@(Model.ID).jpg');
-            $('#user-name').html('@Model.Descricao')
-
-            AdicionarLocal(local);
 
             CarregarPontosMapas();
         });
 
+
+        function Condutor() {
+
+            this.RetornaLocal = function (obj) {
+
+                var local = {};
+
+                local.latitude = obj.latitude
+                local.longitude = obj.longitude;
+                local.id = obj.id;
+                local.descricao = this.RetornaIcone(obj.tipoPonto) + ' ' + obj.condutor.nome;
+
+                if (obj.tipoPonto == 1) {
+                    local.cssClass = 'motoristas';
+                } else {
+                    if (obj.tipoPonto == 1) {
+                        local.cssClass = 'veiculos';
+                    }
+                }
+
+                return local;
+            }
+
+            this.RetornaIcone = function (tipoPonto) {
+                var icone = '';
+
+                switch (tipoPonto) {
+                    case 1: // Motoristas
+                        icone = '<i class="fa fa-user"></i>';
+                        break;
+                    case 2:// Veiculos
+                        icone = '<i class="fa fa-truck"></i>';
+
+                        break;
+                    default:
+                }
+
+                return icone;
+            }
+
+            this.RetornaRotas = function (obj) {
+
+                var rotas = obj;
+
+                var listaRotas = [];
+
+                for (var i = 0; i < rotas.length; i++) {
+
+                    if (i + 1 <= rotas.length) {
+                        var inicio = rotas[i];
+                        var fim = rotas[i + 1];
+
+                        if (inicio != undefined && fim != undefined) {
+                            listaRotas.push({
+                                origem: {
+                                    latitude: inicio.latitude,
+                                    longitude: inicio.longitude
+                                },
+                                destino: {
+                                    latitude: fim.latitude,
+                                    longitude: fim.longitude
+                                }
+                            });
+                        }
+                    }
+                }
+
+                return listaRotas;
+            }
+
+            this.RetornaPointlayerRotas = function (obj) {
+
+                var rotas = obj;
+
+                var listaRotas = [];
+
+                for (var i = 0; i < rotas.length; i++) {
+                    var objLayer = {};
+
+                    objLayer.latitude = rotas[i].latitude;
+                    objLayer.longitude = rotas[i].longitude;
+                    objLayer.descricao = rotas[i].ordem;
+                    objLayer.id = rotas[i].id;
+
+                    if (rotas[i].tipoPonto == 3) {
+                        objLayer.cssClass = 'entrega-pendente';
+                    } else {
+                        if (rotas[i].tipoPonto == 4) {
+                            objLayer.cssClass = 'entrega-completa';
+                        }
+                    }
+                    
+                    listaRotas.push(objLayer);
+                }
+
+                return listaRotas;
+            };
+        }
+
+        function Atividade(obj) {
+            var atributo = obj;
+
+            this.RetornaEnderecos = function () {
+                
+                var atividades = {};
+
+                var html = '';
+
+                for (var i = 0; i < atributo.rota.trechos.length; i++) {
+                    var trecho = atributo.rota.trechos[i];
+
+                    var cssClass = 'bg-warning';
+                    var icon = 'fa-clock-o';
+
+                    if (trecho.tipoPonto == 4) {
+                        cssClass = 'bg-success';
+                        icon = 'fa-check';
+                    }
+
+                    if (trecho.horaEntrega == undefined) {
+                        trecho.horaEntrega = '';
+                    }
+
+
+                    var itemHtml = '<li>\
+                                    <div class="' + cssClass + '">\
+                                        <i class="fa ' + icon + ' text-white"></i>\
+                                    </div>\
+                                    ' + trecho.endereco + '\
+                                    <span class="text-muted">' + trecho.horaEntrega + '</span>\
+                                </li>';
+
+                    html += itemHtml;
+                }
+
+
+                return html;
+            };
+
+            this.RetornaTrechosCompletos = function () {
+                return Dados.rota.trechos.filter(function (item) { return item.tipoPonto == 4 }).length;
+            };
+            this.RetornaTrechosIncompletos = function () {
+                return Dados.rota.trechos.filter(function (item) { return item.tipoPonto == 3 }).length;
+            };
+
+            this.RetornaNome = function () {
+                return atributo.condutor.nome;
+            };
+            this.RetornaTelefone = function () {
+                return atributo.condutor.telefone;
+            };
+        }
+
+        
         $(window).resize(function () {
             CalcularHeightMapa();
         });
+
+
+        function CarregarDadosTela(DadosTela) {
+
+            Dados = DadosTela;
+            
+            mapaConfiguracao = new Mapa();
+
+            var latitude = Dados.latitude;
+            var longitude = Dados.longitude;
+
+            mapaConfiguracao.InicializarConfiguracoesMapa({
+                elemento: '#overlayermap',
+                latitude: latitude,
+                longitude: longitude
+            });
+
+            var condutor = new Condutor();
+
+            // Adiciona a posição do condutor no mapa.
+            mapaConfiguracao.drawOverlay(condutor.RetornaLocal(Dados));
+
+
+
+            mapaConfiguracao.drawRouteList(condutor.RetornaRotas(Dados.rota.trechos));
+
+            mapaConfiguracao.drawRoutePointList(condutor.RetornaPointlayerRotas(Dados.rota.trechos));
+
+
+
+            var atividade = new Atividade(Dados);
+            
+            $('.feeds').empty();
+            $('.feeds').html(atividade.RetornaEnderecos());
+
+            $('#user-name').html(atividade.RetornaNome());
+            $('#user-telefone').html(atividade.RetornaTelefone());
+
+            $('.trechos-completos').html(atividade.RetornaTrechosCompletos());
+            $('.trechos-incompletos').html(atividade.RetornaTrechosIncompletos());
+        }
 
         function CalcularHeightMapa() {
 
@@ -175,68 +354,15 @@
             else {
                 $('.divmapa').height($(window).height() - 280);
             }
-
-            if (mapaConfig != undefined) {
-                // (the 'map' here is the result of the created 'var map = ...' above)
-                google.maps.event.trigger(mapaConfig, "resize");
-            }
-
+            
+            mapaConfiguracao.resize();
         }
 
-        var mapaConfig;
+        var mapaConfiguracao;
         var PontosMapas = {};
 
-
-        function InicializarConfiguracoesMapa() {
-
-            var latitude =  @Model.Latitude.ToString().Replace(",", ".");
-            var longitude = @Model.Longitude.ToString().Replace(",", ".");
-
-            mapaConfig = new GMaps({
-                el: '#overlayermap',
-                lat: latitude,
-                lng: longitude,
-                zoom: 13,
-                panControl: false,
-                scrollwheel: true,
-                streetViewControl: false,
-                mapTypeControl: false,
-                overviewMapControl: false
-            });
-        }
-
-        function AdicionarLocal(local) {
-            if (mapaConfig == undefined) {
-                InicializarConfiguracoesMapa();
-            }
-
-            var cssClass = 'motoristas';
-            var icone = '<i class="fa fa-user"></i>'; // Motoristas
-            if (local.tipoPonto == 2) {
-                cssClass = 'veiculos';
-                icone = '<i class="fa fa-truck"></i>';  // Veiculos
-            }
-
-            //Entrega Pendente
-            if (local.tipoPonto == 3) {
-                cssClass = 'entrega-pendente';
-                icone = '<i class="fa fa-truck"></i>';  // Veiculos
-            }
-            //Entrega Completa
-            if (local.tipoPonto == 4) {
-                cssClass = 'entrega-completa';
-                icone = '<i class="fa fa-truck"></i>';  // Veiculos
-            }
-
-            return mapaConfig.drawOverlay({
-                lat: local.latitude,
-                lng: local.longitude,
-                layer: 'overlayLayer',
-                content: '<div class="gmaps-overlay ' + cssClass + '" style="width: auto;" data-id="' + local.id + '">' + icone + ' ' + local.descricao + '<div class="gmaps-overlay_arrow above ' + cssClass + '"></div></div>',
-            });
-        }
-
-
+        
+        
         function CarregarPontosMapas() {
 
             var dataToServer = {
@@ -263,49 +389,104 @@
                         Alerta(result.Mensagem, '', 'warning');
                         return;
                     }
-
-                    PontosMapas2 = result.data.trechos;
-
-
-                    for (var i = 0; i < PontosMapas2.trechos.length; i++) {
-
-                        if (i + 1 <= PontosMapas2.trechos.length) {
-                            var inicio = PontosMapas2.trechos[i];
-                            var fim = PontosMapas2.trechos[i + 1];
-
-                            if (inicio != undefined && fim != undefined) {
-                                mapaConfig.drawRoute({
-                                    origin: [inicio.latitude, inicio.longitude],
-                                    destination: [fim.latitude, fim.longitude],
-                                    travelMode: 'driving',
-                                    strokeColor: '#131540',
-                                    strokeOpacity: 0.6,
-                                    strokeWeight: 6
-                                });
-                            }
-                        }
-                        PontosMapas2.trechos[i].descricao = i + 1;
-                        //PontosMapas2.trechos[i].tipoPonto = 2;
-                        AdicionarLocal(PontosMapas2.trechos[i]);
-                    }
-
-
-
+                    
+                    CarregarDadosTela(result.data);
                 }
             });
         }
 
-        function teste() {
-            mapaConfig.drawRoute({
-                origin: [-23.528743, -46.739711],
-                destination: [-23.540260, -46.719487],
-                travelMode: 'driving',
-                strokeColor: '#131540',
-                strokeOpacity: 0.6,
-                strokeWeight: 6
-            });
 
+        function Mapa(obj) {
+            var configuracao = obj;
+
+            var mapaConfig;
+
+            this.InicializarConfiguracoesMapa = function (obj) {
+
+                if (obj != undefined) {
+                    configuracao = obj;
+                }
+
+                if (configuracao.elemento == '' || configuracao.elemento == undefined) {
+                    configuracao.elemento = '#overlayermap';
+                }
+
+                mapaConfig = new GMaps({
+                    el: configuracao.elemento,
+                    lat: configuracao.latitude,
+                    lng: configuracao.longitude,
+                    zoom: 13,
+                    panControl: false,
+                    scrollwheel: true,
+                    streetViewControl: false,
+                    mapTypeControl: false,
+                    overviewMapControl: false
+                });
+            }
+
+
+            this.drawOverlay = function (obj) {
+
+                if (mapaConfig == undefined) {
+                    this.InicializarConfiguracoesMapa();
+                }
+
+                if (obj == undefined) {
+                    throw new DOMException('O "obj" não poderá ser undefined.');
+                }
+
+                return mapaConfig.drawOverlay({
+                    lat: obj.latitude,
+                    lng: obj.longitude,
+                    layer: 'overlayLayer',
+                    content: '<div class="gmaps-overlay ' + obj.cssClass + '" data-id="' + obj.id + '" style="width: auto; min-width: 40px;" >' + obj.descricao + '<div class="gmaps-overlay_arrow above ' + obj.cssClass + '"></div></div>',
+                });
+            }
+
+            this.drawRoute = function (obj) {
+
+                if (mapaConfig == undefined) {
+                    this.InicializarConfiguracoesMapa();
+                }
+
+                if (obj == undefined) {
+                    throw new DOMException('O "obj" não poderá ser undefined.');
+                }
+
+                mapaConfig.drawRoute({
+                    origin: [obj.origem.latitude, obj.origem.longitude],
+                    destination: [obj.destino.latitude, obj.destino.longitude],
+                    travelMode: 'driving',
+                    strokeColor: '#131540',
+                    strokeOpacity: 0.6,
+                    strokeWeight: 6
+                });
+            }
+
+            this.drawRouteList = function (objList) {
+
+                for (var i = 0; i < objList.length; i++) {
+                    var obj = objList[i];
+                    this.drawRoute(obj);
+                }
+            }
+
+            this.drawRoutePointList = function (objList) {
+                for (var i = 0; i < objList.length; i++) {
+                    var obj = objList[i];
+                    this.drawOverlay(obj);
+                }
+            }
+
+            this.resize = function () {
+
+                if (mapaConfig == undefined) {
+                    this.InicializarConfiguracoesMapa();
+                }
+
+                google.maps.event.trigger(mapaConfig, "resize");
+            }
         }
-
+        
     </script>
 }

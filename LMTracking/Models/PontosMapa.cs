@@ -14,7 +14,9 @@ namespace LMTracking.Models
         public Int16 TipoPonto { get; set; }
         public String Descricao { get; set; }
 
-        public ProgramacaoEntrega Trechos
+        public Condutor condutor { get; set; }
+
+        public ProgramacaoEntrega Rota
         {
             get
             {
