@@ -181,9 +181,9 @@
                 PontosMapas[i].layer = AdicionarLocal(PontosMapas[i]);
 
                 if (PontosMapas[i].tipoPonto == 1) {
-                    $('#Motoristas').find('.list-group').append('<a href="../Rastreamento/Consultar/' + PontosMapas[i].id + '" class="list-group-item action-maps active motoristas" data-id="' + PontosMapas[i].id + '"><i class="fa fa-user fa-fw" aria-hidden="true"></i>&nbsp; ' + PontosMapas[i].descricao + '</a>');
+                    $('#Motoristas').find('.list-group').append('<a href="../LmTracking/Rastreamento/Consultar/' + PontosMapas[i].id + '" class="list-group-item action-maps active motoristas" data-id="' + PontosMapas[i].id + '"><i class="fa fa-user fa-fw" aria-hidden="true"></i>&nbsp; ' + PontosMapas[i].descricao + '</a>');
                 } else {
-                    $('#Veiculos').find('.list-group').append('<a href="../Rastreamento/Consultar/' + PontosMapas[i].id + '" class="list-group-item action-maps active veiculos" data-id="' + PontosMapas[i].id + '"><i class="fa fa-truck fa-fw" aria-hidden="true"></i>&nbsp; ' + PontosMapas[i].descricao + '</a>');
+                    $('#Veiculos').find('.list-group').append('<a href="../LmTracking/Rastreamento/Consultar/' + PontosMapas[i].id + '" class="list-group-item action-maps active veiculos" data-id="' + PontosMapas[i].id + '"><i class="fa fa-truck fa-fw" aria-hidden="true"></i>&nbsp; ' + PontosMapas[i].descricao + '</a>');
                 }
             }
         }

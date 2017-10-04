@@ -27,5 +27,7 @@ namespace LMTracking.Helpers
         }
 
         public static void NovoUsuarioLogado(this HttpContext context, Usuario usuario) => context.Session.SetInt32(TagUsuario, usuario.ID);
+
+        public static void UsuarioLogout(this HttpContext context) => context.Session.SetInt32(TagUsuario, 0);
     }
 }

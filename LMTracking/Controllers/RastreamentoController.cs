@@ -13,10 +13,10 @@ namespace LMTracking.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            //if (HttpContext.RetornaUsuarioLogado() == null)
-            //{
-            //    return RedirectToAction("Login", "Account");
-            //}
+            if (HttpContext.RetornaUsuarioLogado() == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
 
             return View();
         }
@@ -24,10 +24,10 @@ namespace LMTracking.Controllers
         [HttpGet]
         public IActionResult Consultar(Int32 ID)
         {
-            //if (HttpContext.RetornaUsuarioLogado() == null)
-            //{
-            //    return RedirectToAction("Login", "Account");
-            //}
+            if (HttpContext.RetornaUsuarioLogado() == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
 
             var dados = DadosAplicacao.ListaPontosMapa.SingleOrDefault(p => p.ID == ID);
 

@@ -65,7 +65,7 @@
     <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
         <ol class="breadcrumb">
             <li><a href="#">LM Tracking</a></li>
-            <li><a href="/Rastreamento/Index">Rastreamento</a></li>
+            <li><a href="~/Rastreamento">Rastreamento</a></li>
             <li class="active">Consultar</li>
 
         </ol>
@@ -98,16 +98,16 @@
                 <div class="row">
                     <div class="col-md-6 col-sm-6 text-center">
                         <p class="text-purple">Completas</p>
-                        <h1 class="trechos-completos">258</h1>
+                        <h1 class="trechos-completos">0</h1>
                     </div>
                     <div class="col-md-6 col-sm-6 text-center">
                         <p class="text-blue">Pendentes</p>
-                        <h1 class="trechos-incompletos">125</h1>
+                        <h1 class="trechos-incompletos">0</h1>
                     </div>
                     <div class="col-md-12 col-sm-12">
                         <h3 class="box-title">Atividades</h3>
                         <ul class="feeds">
-                            <li>
+                            @*<li>
                                 <div class="bg-success">
                                     <i class="fa fa-check text-white"></i>
                                 </div>
@@ -122,7 +122,7 @@
                             </li>
                             <li>
                                 <div class="bg-warning"><i class="fa fa-clock-o text-white"></i></div> New order received.<span class="text-muted">Pendente</span>
-                            </li>
+                            </li>*@
                         </ul>
                     </div>
 
@@ -160,8 +160,10 @@
 
                 if (obj.tipoPonto == 1) {
                     local.cssClass = 'motoristas';
+                    $('.overlay-box').css('background', '#ab8ce4');
                 } else {
-                    if (obj.tipoPonto == 1) {
+                    if (obj.tipoPonto == 2) {
+                        $('.overlay-box').css('background', '#03a9f3');
                         local.cssClass = 'veiculos';
                     }
                 }
@@ -355,7 +357,9 @@
                 $('.divmapa').height($(window).height() - 280);
             }
             
-            mapaConfiguracao.resize();
+            if (mapaConfiguracao != null) {
+                mapaConfiguracao.resize();
+            }
         }
 
         var mapaConfiguracao;

@@ -23,12 +23,20 @@ namespace LMTracking.Controllers
             {
                 UsuarioLogado.NovoUsuarioLogado(HttpContext, user);
 
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Rastreamento");
             }
 
             
             
             return View();
         }
+
+        public IActionResult Logout()
+        {
+            HttpContext.UsuarioLogout();
+            
+            return RedirectToAction("Login", "Account");
+        }
+
     }
 }

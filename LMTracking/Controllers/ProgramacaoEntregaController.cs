@@ -21,6 +21,11 @@ namespace LMTracking.Controllers
         
         public IActionResult Incluir()
         {
+            if (HttpContext.RetornaUsuarioLogado() == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             return View();
         }
     }
